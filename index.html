@@ -1,0 +1,2583 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Psyrofories – Psychology for Curious Minds</title>
+  <meta name="description" content="Platform edukasi psikologi modern. Pelajari kesehatan mental, tokoh psikologi, mood tracker, journaling, mindfulness, dan quiz psikologi." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,700;1,600&display=swap" rel="stylesheet" />
+  <style>
+    /* ============================================================
+       ROOT & RESET
+    ============================================================ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --blue-50:  #DFF3FF;
+      --blue-100: #C5E9FF;
+      --blue-200: #A7D8FF;
+      --blue-300: #7DC3FF;
+      --blue-400: #4EA8E8;
+      --blue-500: #2C7BE5;
+      --blue-700: #2C5282;
+      --blue-900: #1A3658;
+      --white:    #FFFFFF;
+      --glass-bg: rgba(255,255,255,0.25);
+      --glass-border: rgba(255,255,255,0.4);
+      --glass-shadow: 0 8px 32px rgba(44,82,130,0.15);
+      --text-dark:  #1A2B45;
+      --text-mid:   #3A5A82;
+      --text-light: #6B8FB5;
+      --gradient-hero: linear-gradient(135deg, #1A3658 0%, #2C5282 40%, #4EA8E8 100%);
+      --gradient-soft: linear-gradient(135deg, #F0F8FF 0%, #DFF3FF 100%);
+      --blob-1: #4EA8E8;
+      --blob-2: #A7D8FF;
+      --blob-3: #2C5282;
+      --radius-sm: 16px;
+      --radius-md: 24px;
+      --radius-lg: 40px;
+      --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      --transition-smooth: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      --font-main: 'Inter', sans-serif;
+      --font-display: 'Playfair Display', serif;
+
+      /* Light mode semantic tokens */
+      --bg-page:    #F8FCFF;
+      --bg-section: #ffffff;
+      --bg-section-alt: linear-gradient(135deg, #F0F8FF 0%, #DFF3FF 100%);
+      --bg-card:    #ffffff;
+      --bg-card-hover: #F8FCFF;
+      --glass-bg-hover: rgba(255,255,255,0.3);
+      --border-card: rgba(255,255,255,0.8);
+      --input-bg:   #ffffff;
+      --input-border: var(--blue-100);
+    }
+    [data-theme="dark"] {
+      --blue-50:  #0d1f35;
+      --blue-100: #122540;
+      --blue-200: #1e3a5f;
+      --blue-300: #2a5080;
+      --blue-400: #4EA8E8;
+      --blue-500: #5BAFF0;
+      --blue-700: #A7D8FF;
+      --blue-900: #DFF3FF;
+      --white:    #0a1628;
+      --glass-bg: rgba(255,255,255,0.06);
+      --glass-border: rgba(255,255,255,0.12);
+      --glass-shadow: 0 8px 32px rgba(0,0,0,0.4);
+      --text-dark:  #E8F4FF;
+      --text-mid:   #A7C8E8;
+      --text-light: #6B9AB8;
+      --gradient-soft: linear-gradient(135deg, #0a1628 0%, #0d1f35 100%);
+      --gradient-hero: linear-gradient(135deg, #050b14 0%, #0f1e33 40%, #1a3658 100%);
+      --blob-1: #1a3658;
+      --blob-2: #2c5282;
+      --blob-3: #0a1628;
+
+      --bg-page:    #060f1e;
+      --bg-section: #0a1628;
+      --bg-section-alt: linear-gradient(135deg, #0a1628 0%, #0d1f35 100%);
+      --bg-card:    #0f1e33;
+      --bg-card-hover: #152540;
+      --glass-bg-hover: rgba(255,255,255,0.1);
+      --border-card: rgba(255,255,255,0.08);
+      --input-bg:   #0f1e33;
+      --input-border: #1e3a5f;
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-main);
+      background: var(--bg-page);
+      color: var(--text-dark);
+      overflow-x: hidden;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      transition: background 0.4s ease, color 0.4s ease;
+    }
+
+    body.no-scroll { overflow: hidden; }
+    img { max-width: 100%; display: block; }
+    a { color: inherit; text-decoration: none; }
+    button { cursor: pointer; border: none; background: none; font-family: inherit; outline: none; }
+    ul { list-style: none; }
+
+    /* ============================================================
+       SCROLL PROGRESS
+    ============================================================ */
+    .scroll-progress-container {
+      position: fixed; top: 0; left: 0; width: 100%; height: 4px; z-index: 10001; background: rgba(255,255,255,0.1);
+    }
+    .scroll-progress-bar {
+      height: 100%; background: var(--blue-200); width: 0%;
+      box-shadow: 0 0 10px var(--blue-200);
+      transition: width 0.1s ease-out;
+    }
+
+    /* ============================================================
+       LOADING SCREEN
+    ============================================================ */
+    #loading-screen {
+      position: fixed; inset: 0; z-index: 9999;
+      background: var(--gradient-hero);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 24px;
+      transition: opacity .6s ease, visibility .6s ease;
+    }
+    #loading-screen.hidden { opacity: 0; visibility: hidden; }
+    .loader-logo {
+      font-family: var(--font-display);
+      font-size: 3.5rem;
+      color: #fff;
+      letter-spacing: -1px;
+      text-shadow: 0 4px 20px rgba(0,0,0,.3);
+      animation: loadPulse 1.5s ease-in-out infinite;
+    }
+    .loader-bar-wrap {
+      width: 250px; height: 6px;
+      background: rgba(255,255,255,.2);
+      border-radius: 99px; overflow: hidden;
+      box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);
+    }
+    .loader-bar {
+      height: 100%; width: 0;
+      background: linear-gradient(90deg, var(--blue-200), #fff);
+      border-radius: 99px;
+      animation: loadBar 2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+    }
+    .loader-tagline { color: rgba(255,255,255,.8); font-size: 1rem; font-weight: 300; letter-spacing: 1px; }
+    @keyframes loadPulse { 0%,100%{transform:scale(1); opacity:1} 50%{transform:scale(1.05); opacity:.8} }
+    @keyframes loadBar { 0% { width: 0; } 100% { width: 100%; } }
+
+    /* ============================================================
+       NAVBAR
+    ============================================================ */
+    #navbar {
+      position: fixed; top: 4px; left: 5%; right: 5%; z-index: 1000;
+      padding: 0 24px;
+      height: 70px; border-radius: 99px;
+      display: flex; align-items: center; justify-content: space-between;
+      transition: var(--transition-smooth);
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    #navbar.scrolled {
+      top: 10px;
+      background: rgba(255,255,255,.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 0 10px 40px rgba(44,82,130,.1);
+      border: 1px solid rgba(255,255,255,0.5);
+    }
+    .nav-logo {
+      font-family: var(--font-display);
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: #fff;
+      letter-spacing: -.5px;
+      transition: var(--transition);
+      text-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    }
+    #navbar.scrolled .nav-logo { color: var(--blue-700); text-shadow: none; }
+    .nav-links {
+      display: flex; align-items: center; gap: 8px;
+    }
+    .nav-links a {
+      padding: 10px 14px;
+      border-radius: 99px;
+      font-size: .82rem; font-weight: 600;
+      color: rgba(255,255,255,.9);
+      transition: var(--transition);
+      position: relative;
+      white-space: nowrap;
+    }
+    #navbar.scrolled .nav-links a { color: var(--text-mid); }
+    .nav-links a:not(.nav-cta)::after {
+      content: ''; position: absolute; bottom: 4px; left: 50%; transform: translateX(-50%) scaleX(0);
+      width: 20px; height: 3px; background: var(--blue-200); border-radius: 10px;
+      transition: transform 0.3s ease;
+    }
+    .nav-links a:hover:not(.nav-cta)::after { transform: translateX(-50%) scaleX(1); }
+    #navbar.scrolled .nav-links a:hover { color: var(--blue-700); }
+    
+    .nav-cta {
+      background: rgba(255,255,255,.2) !important;
+      border: 1px solid rgba(255,255,255,.4) !important;
+      color: #fff !important;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+    .nav-cta:hover {
+      background: #fff !important; color: var(--blue-700) !important;
+      transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+    }
+    #navbar.scrolled .nav-cta {
+      background: var(--blue-700) !important;
+      color: #fff !important;
+      border-color: transparent !important;
+    }
+    #navbar.scrolled .nav-cta:hover {
+      background: var(--blue-500) !important;
+      box-shadow: 0 8px 25px rgba(44,82,130,.3);
+    }
+
+    #hamburger {
+      display: none;
+      flex-direction: column; gap: 5px;
+      padding: 6px; border-radius: 8px;
+      cursor: pointer;
+    }
+    #hamburger span {
+      display: block; width: 26px; height: 3px;
+      background: #fff; border-radius: 99px;
+      transition: var(--transition);
+    }
+    #navbar.scrolled #hamburger span { background: var(--blue-700); }
+
+    #hamburger.open span:nth-child(1) { transform: rotate(45deg) translate(6px,6px); }
+    #hamburger.open span:nth-child(2) { opacity: 0; }
+    #hamburger.open span:nth-child(3) { transform: rotate(-45deg) translate(6px,-6px); }
+
+    /* Dark mode toggle */
+    #dark-toggle {
+      width: 44px; height: 26px;
+      background: rgba(255,255,255,0.2);
+      border: 1px solid rgba(255,255,255,0.3);
+      border-radius: 99px;
+      cursor: pointer;
+      position: relative;
+      transition: var(--transition-smooth);
+      flex-shrink: 0;
+    }
+    #dark-toggle::before {
+      content: '';
+      position: absolute; top: 3px; left: 3px;
+      width: 18px; height: 18px;
+      background: #fff;
+      border-radius: 50%;
+      transition: var(--transition-smooth);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+    [data-theme="dark"] #dark-toggle::before {
+      transform: translateX(18px);
+      background: var(--blue-400);
+    }
+    #navbar.scrolled #dark-toggle {
+      background: var(--blue-50);
+      border-color: var(--blue-200);
+    }
+    #navbar.scrolled #dark-toggle::before {
+      background: var(--blue-700);
+    }
+    [data-theme="dark"] #navbar.scrolled #dark-toggle {
+      background: var(--blue-200);
+    }
+    .nav-icon { font-size: 0.9rem; position: absolute; top: 50%; transform: translateY(-50%); transition: var(--transition); }
+    .nav-icon.sun { left: 6px; opacity: 1; }
+    .nav-icon.moon { right: 5px; opacity: 0.5; }
+    [data-theme="dark"] .nav-icon.sun { opacity: 0.5; }
+    [data-theme="dark"] .nav-icon.moon { opacity: 1; }
+
+    /* mobile nav */
+    #mobile-nav {
+      position: fixed; inset: 0; z-index: 999;
+      background: rgba(26,54,88,.95);
+      backdrop-filter: blur(25px);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 16px;
+      opacity: 0; visibility: hidden;
+      transition: var(--transition-smooth);
+      transform: translateY(-20px);
+    }
+    #mobile-nav.open { opacity: 1; visibility: visible; transform: translateY(0); }
+    #mobile-nav a {
+      font-size: 1.5rem; font-weight: 700;
+      color: rgba(255,255,255,.9);
+      padding: 12px 32px;
+      border-radius: var(--radius-md);
+      transition: var(--transition);
+      text-align: center; width: 80%;
+    }
+    #mobile-nav a:hover { background: rgba(255,255,255,.15); color: #fff; transform: scale(1.05); }
+
+    /* ============================================================
+       BUTTON RIPPLE EFFECT
+    ============================================================ */
+    .btn-ripple { position: relative; overflow: hidden; }
+    .ripple {
+      position: absolute; border-radius: 50%; transform: scale(0);
+      animation: ripple 0.6s linear; background: rgba(255,255,255,0.4);
+      pointer-events: none; width: 100px; height: 100px; margin-top: -50px; margin-left: -50px;
+    }
+    @keyframes ripple { to { transform: scale(4); opacity: 0; } }
+
+    /* ============================================================
+       SECTIONS COMMON
+    ============================================================ */
+    section { padding: 120px 5%; position: relative; }
+    .section-header { text-align: center; margin-bottom: 70px; position: relative; z-index: 2;}
+    .section-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--blue-50);
+      color: var(--blue-700);
+      font-size: .85rem; font-weight: 800;
+      letter-spacing: 2px; text-transform: uppercase;
+      padding: 8px 20px; border-radius: 99px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 15px rgba(44,82,130,.05);
+      border: 1px solid rgba(167,216,255,0.3);
+    }
+    .section-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.2rem, 5vw, 3.5rem);
+      font-weight: 700;
+      color: var(--text-dark);
+      line-height: 1.2;
+      margin-bottom: 18px;
+    }
+    .section-title span { 
+      color: var(--blue-500); 
+      position: relative;
+      display: inline-block;
+    }
+    .section-title span::after {
+      content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 30%;
+      background: var(--blue-100); z-index: -1; transform: rotate(-2deg);
+      border-radius: 4px;
+    }
+    .section-subtitle {
+      font-size: 1.1rem;
+      color: var(--text-light);
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.8;
+    }
+
+    /* scroll animation */
+    .reveal {
+      opacity: 0;
+      transform: translateY(40px);
+      transition: opacity 0.8s cubic-bezier(0.4, 0, 0.2, 1), transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+    .delay-1 { transition-delay: 0.1s; }
+    .delay-2 { transition-delay: 0.2s; }
+    .delay-3 { transition-delay: 0.3s; }
+    .delay-4 { transition-delay: 0.4s; }
+
+    /* ============================================================
+       HERO SECTION
+    ============================================================ */
+    #hero {
+      min-height: 100vh;
+      background: var(--gradient-hero);
+      display: flex; align-items: center;
+      position: relative; overflow: hidden;
+      padding: 140px 5% 80px;
+    }
+    /* Animated Mesh Background */
+    .mesh-bg {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%; overflow: hidden; z-index: 0;
+    }
+    .mesh-blob {
+      position: absolute; border-radius: 50%; filter: blur(90px); opacity: 0.6;
+      animation: meshFloat 10s infinite alternate ease-in-out;
+    }
+    .mesh-blob.b1 { width: 600px; height: 600px; background: var(--blob-1); top: -10%; left: -10%; animation-delay: 0s; }
+    .mesh-blob.b2 { width: 500px; height: 500px; background: var(--blob-2); bottom: -20%; right: -10%; animation-delay: 2s; }
+    .mesh-blob.b3 { width: 400px; height: 400px; background: var(--blob-3); top: 30%; left: 40%; animation-delay: 4s; }
+    
+    @keyframes meshFloat {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(50px, 50px) scale(1.1); }
+    }
+
+    .hero-content {
+      position: relative; z-index: 2;
+      max-width: 700px;
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 10px;
+      background: rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.2);
+      backdrop-filter: blur(15px);
+      padding: 10px 22px; border-radius: 99px;
+      color: #fff;
+      font-size: .85rem; font-weight: 700;
+      letter-spacing: 1px; text-transform: uppercase;
+      margin-bottom: 30px;
+      animation: slideUpFade 0.8s ease 0.2s both;
+    }
+    .hero-badge-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--blue-200);
+      box-shadow: 0 0 10px var(--blue-200);
+      animation: badgePulse 2s ease-in-out infinite;
+    }
+    @keyframes badgePulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(1.3)} }
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      font-weight: 700;
+      color: #fff;
+      line-height: 1.1;
+      margin-bottom: 24px;
+      animation: slideUpFade 0.8s ease 0.35s both;
+      text-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    }
+    .hero-title em {
+      font-style: italic;
+      color: var(--blue-200);
+      position: relative;
+    }
+    .hero-tagline {
+      font-size: clamp(1.1rem, 2vw, 1.3rem);
+      color: rgba(255,255,255,.85);
+      line-height: 1.8;
+      margin-bottom: 48px;
+      animation: slideUpFade 0.8s ease 0.5s both;
+      font-weight: 300;
+    }
+    .hero-buttons {
+      display: flex; flex-wrap: wrap; gap: 16px;
+      animation: slideUpFade 0.8s ease 0.65s both;
+    }
+    .btn-primary {
+      padding: 16px 36px;
+      background: #fff;
+      color: var(--blue-700);
+      border-radius: 99px;
+      font-weight: 800; font-size: 1rem;
+      box-shadow: 0 10px 30px rgba(0,0,0,.2);
+      transition: var(--transition);
+      display: inline-flex; align-items: center; gap: 10px;
+    }
+    .btn-primary:hover { transform: translateY(-5px); box-shadow: 0 15px 40px rgba(0,0,0,.3); color: var(--blue-500); }
+    .btn-secondary {
+      padding: 16px 36px;
+      background: rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.3);
+      color: #fff;
+      border-radius: 99px;
+      font-weight: 700; font-size: 1rem;
+      backdrop-filter: blur(10px);
+      transition: var(--transition);
+      display: inline-flex; align-items: center; gap: 10px;
+    }
+    .btn-secondary:hover { background: rgba(255,255,255,.2); transform: translateY(-5px); border-color: #fff; }
+    
+    .hero-stats {
+      display: flex; gap: 48px;
+      margin-top: 70px;
+      animation: slideUpFade 0.8s ease 0.8s both;
+    }
+    .hero-stat { position: relative; }
+    .hero-stat::after {
+      content: ''; position: absolute; right: -24px; top: 10%; height: 80%; width: 1px;
+      background: rgba(255,255,255,0.2);
+    }
+    .hero-stat:last-child::after { display: none; }
+    .hero-stat-num {
+      font-size: 2.5rem; font-weight: 900;
+      color: #fff; line-height: 1; margin-bottom: 8px;
+    }
+    .hero-stat-num span { color: var(--blue-200); }
+    .hero-stat-label { font-size: 0.9rem; color: rgba(255,255,255,.7); font-weight: 500; text-transform: uppercase; letter-spacing: 1px; }
+    
+    .hero-visual {
+      position: absolute; right: 5%; top: 50%;
+      transform: translateY(-50%);
+      width: min(450px, 40%);
+      z-index: 2;
+      animation: slideUpFade 1s ease 0.5s both;
+    }
+    .glass-card-3d {
+      background: var(--glass-bg);
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      border-radius: var(--radius-lg);
+      padding: 36px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.2), inset 0 0 0 1px rgba(255,255,255,0.2);
+      transform-style: preserve-3d;
+      transform: perspective(1000px) rotateX(5deg) rotateY(-10deg);
+      transition: var(--transition-smooth);
+      animation: float3D 6s ease-in-out infinite alternate;
+    }
+    .glass-card-3d:hover {
+      transform: perspective(1000px) rotateX(0deg) rotateY(0deg) scale(1.05);
+      background: var(--glass-bg-hover);
+    }
+    @keyframes float3D {
+      0% { transform: perspective(1000px) rotateX(5deg) rotateY(-10deg) translateY(0); }
+      100% { transform: perspective(1000px) rotateX(2deg) rotateY(-5deg) translateY(-20px); }
+    }
+
+    .hero-card-title { color: rgba(255,255,255,.8); font-size: .85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 24px; display: flex; align-items: center; gap: 8px;}
+    .hero-card-quote {
+      font-family: var(--font-display);
+      font-size: 1.4rem; font-style: italic;
+      color: #fff; line-height: 1.6;
+      margin-bottom: 20px;
+    }
+    .hero-card-author { color: var(--blue-200); font-size: 1rem; font-weight: 700; text-align: right;}
+    .hero-mini-cards { display: flex; flex-direction: column; gap: 12px; margin-top: 24px; }
+    .hero-mini-card {
+      background: rgba(255,255,255,.15);
+      border-radius: var(--radius-sm);
+      padding: 14px 20px;
+      display: flex; align-items: center; gap: 16px;
+      color: #fff;
+      font-size: .9rem; font-weight: 500;
+      transition: var(--transition);
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .hero-mini-card:hover { background: rgba(255,255,255,.25); transform: translateX(10px); }
+    .hero-mini-icon { font-size: 1.5rem; background: rgba(255,255,255,0.2); width: 40px; height: 40px; display: flex; justify-content: center; align-items: center; border-radius: 10px;}
+    
+    @keyframes slideUpFade { from{opacity:0;transform:translateY(40px)} to{opacity:1;transform:translateY(0)} }
+    
+    .hero-scroll-hint {
+      position: absolute; bottom: 40px; left: 50%;
+      transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 12px;
+      color: rgba(255,255,255,.7); font-size: .85rem; font-weight: 500; letter-spacing: 1px;
+      animation: slideUpFade 0.8s ease 1.2s both;
+      cursor: pointer; transition: var(--transition);
+    }
+    .hero-scroll-hint:hover { color: #fff; transform: translateX(-50%) translateY(5px); }
+    .hero-scroll-dot {
+      width: 30px; height: 50px;
+      border: 2px solid rgba(255,255,255,.4);
+      border-radius: 99px;
+      display: flex; justify-content: center; padding-top: 8px;
+    }
+    .hero-scroll-dot::after {
+      content:''; width: 6px; height: 12px;
+      background: #fff; border-radius: 99px;
+      animation: scrollDot 1.5s ease-in-out infinite;
+    }
+    @keyframes scrollDot { 0%{transform:translateY(0);opacity:1} 100%{transform:translateY(20px);opacity:0} }
+
+    /* ============================================================
+       DAILY QUOTE
+    ============================================================ */
+    #daily-quote {
+      background: linear-gradient(135deg, var(--blue-900), var(--blue-700));
+      padding: 80px 5%;
+      text-align: center;
+      position: relative; overflow: hidden;
+    }
+    #daily-quote::before {
+      content:'"';
+      position: absolute; top: -50px; left: 5%;
+      font-size: 20rem; color: rgba(255,255,255,.03);
+      font-family: var(--font-display);
+      line-height: 1;
+    }
+    .quote-text {
+      font-family: var(--font-display);
+      font-size: clamp(1.5rem, 4vw, 2.5rem);
+      font-style: italic;
+      color: #fff;
+      max-width: 800px; margin: 0 auto 24px;
+      line-height: 1.5; position: relative; z-index: 1;
+    }
+    .quote-author { color: var(--blue-200); font-size: 1.1rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;}
+    #refresh-quote {
+      margin-top: 30px;
+      background: rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.3);
+      color: #fff; padding: 12px 28px;
+      border-radius: 99px; font-size: .9rem; font-weight: 700;
+      transition: var(--transition);
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    #refresh-quote:hover { background: #fff; color: var(--blue-700); transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.2); }
+    .quote-icon { transition: transform 0.5s ease;}
+    #refresh-quote:hover .quote-icon { transform: rotate(180deg); }
+
+    /* ============================================================
+       MENTAL HEALTH EDUCATION
+    ============================================================ */
+    #education { background: var(--gradient-soft); }
+    .edu-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 30px;
+      position: relative; z-index: 2;
+    }
+    .edu-card {
+      background: #fff;
+      border-radius: var(--radius-lg);
+      padding: 40px 32px;
+      box-shadow: 0 10px 30px rgba(44,82,130,.05);
+      border: 1px solid rgba(255,255,255,0.8);
+      transition: var(--transition);
+      position: relative; overflow: hidden;
+      display: flex; flex-direction: column;
+    }
+    .edu-card::before {
+      content:''; position: absolute; top:0; left:0; right:0; height: 6px;
+      background: var(--gradient-hero);
+      transform: scaleX(0); transform-origin: left; transition: var(--transition-smooth);
+    }
+    .edu-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(44,82,130,.12); border-color: var(--blue-200); }
+    .edu-card:hover::before { transform: scaleX(1); }
+    .edu-icon-wrap {
+      width: 70px; height: 70px; border-radius: 20px;
+      background: var(--blue-50);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 2rem; margin-bottom: 24px;
+      transition: var(--transition);
+    }
+    .edu-card:hover .edu-icon-wrap { background: var(--blue-700); color: #fff; transform: scale(1.1) rotate(5deg); }
+    .edu-title { font-size: 1.3rem; font-weight: 800; margin-bottom: 16px; color: var(--text-dark); transition: var(--transition);}
+    .edu-card:hover .edu-title { color: var(--blue-700); }
+    .edu-desc { font-size: 1rem; color: var(--text-light); line-height: 1.7; flex-grow: 1; }
+    .edu-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+    .edu-tag {
+      font-size: .8rem; font-weight: 700; letter-spacing: 0.5px;
+      padding: 6px 14px; border-radius: 8px;
+      background: #F8FCFF; color: var(--blue-500); border: 1px solid var(--blue-100);
+      transition: var(--transition);
+    }
+    .edu-card:hover .edu-tag { background: var(--blue-50); border-color: var(--blue-200); }
+
+    /* ============================================================
+       MYTH VS FACT (3D FLIP CARDS)
+    ============================================================ */
+    #myth-fact { background: #fff; position: relative; }
+    .myth-bg-pattern {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0.03;
+      background-image: radial-gradient(var(--blue-700) 2px, transparent 2px); background-size: 30px 30px; z-index: 1;
+    }
+    .myth-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 30px; position: relative; z-index: 2;
+    }
+    .myth-card {
+      perspective: 1000px;
+      height: 280px;
+      cursor: pointer;
+    }
+    .myth-card-inner {
+      position: relative; width: 100%; height: 100%; text-align: center;
+      transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+      transform-style: preserve-3d;
+      border-radius: var(--radius-md);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    }
+    .myth-card:hover .myth-card-inner { transform: rotateY(180deg); box-shadow: 0 20px 40px rgba(0,0,0,0.15); }
+    .myth-front, .myth-back {
+      position: absolute; inset: 0; backface-visibility: hidden;
+      border-radius: var(--radius-md); padding: 40px 30px;
+      display: flex; flex-direction: column; justify-content: center; align-items: center;
+    }
+    .myth-front {
+      background: linear-gradient(135deg, #fff, #FEF2F2); border: 2px solid #FECACA;
+    }
+    .myth-back {
+      background: linear-gradient(135deg, #fff, #ECFDF5); border: 2px solid #A7F3D0;
+      transform: rotateY(180deg);
+    }
+    .myth-header {
+      font-weight: 800; font-size: 1.1rem; margin-bottom: 20px;
+      display: flex; align-items: center; gap: 10px; letter-spacing: 2px;
+    }
+    .myth-front .myth-header { color: #DC2626; }
+    .myth-back .myth-header { color: #059669; }
+    .myth-icon { font-size: 1.8rem; background: #fff; width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.1);}
+    .myth-text, .fact-text { font-size: 1rem; line-height: 1.6; font-weight: 500; }
+    .myth-text { color: #4B5563; }
+    .fact-text { color: #064E3B; }
+    .flip-hint { position: absolute; bottom: 15px; right: 20px; font-size: 0.8rem; color: #9CA3AF; display: flex; align-items: center; gap: 5px; font-style: italic;}
+
+    /* ============================================================
+       TOKOH PSIKOLOGI
+    ============================================================ */
+    #figures { background: var(--gradient-soft); }
+    .figures-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 28px;
+      max-width: 1200px; margin: 0 auto;
+      position: relative; z-index: 2;
+    }
+    .figure-card {
+      background: #fff;
+      border-radius: var(--radius-lg);
+      padding: 40px 24px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(44,82,130,.05);
+      border: 1px solid rgba(255,255,255,0.8);
+      cursor: pointer;
+      transition: var(--transition-smooth);
+      position: relative; overflow: hidden;
+      z-index: 1;
+    }
+    .figure-card::before {
+      content: ''; position: absolute; inset: 0; background: var(--gradient-hero);
+      opacity: 0; z-index: -1; transition: var(--transition-smooth);
+    }
+    .figure-card:hover { transform: translateY(-10px) scale(1.02); box-shadow: 0 20px 50px rgba(44,82,130,.2); border-color: transparent;}
+    .figure-card:hover::before { opacity: 1; }
+    .figure-avatar {
+      width: 120px; height: 120px; border-radius: 50%;
+      overflow: hidden;
+      margin: 0 auto 20px;
+      box-shadow: 0 10px 25px rgba(44,82,130,.2);
+      transition: var(--transition-smooth);
+      border: 4px solid #fff;
+      background: var(--blue-50);
+    }
+    .figure-avatar img {
+      width: 100%; height: 100%; object-fit: cover; object-position: top center;
+      display: block;
+      filter: grayscale(20%);
+      transition: var(--transition-smooth);
+    }
+    .figure-card:hover .figure-avatar { transform: scale(1.1); box-shadow: 0 15px 40px rgba(0,0,0,0.35); border-color: rgba(255,255,255,0.6); }
+    .figure-card:hover .figure-avatar img { filter: grayscale(0%); }
+
+    /* Figure card entrance animation */
+    @keyframes figureIn {
+      from { opacity: 0; transform: translateY(30px) scale(0.95); }
+      to   { opacity: 1; transform: translateY(0)  scale(1); }
+    }
+    .figure-card {
+      animation: figureIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    }
+    .figure-card:nth-child(1) { animation-delay: 0.05s; }
+    .figure-card:nth-child(2) { animation-delay: 0.1s; }
+    .figure-card:nth-child(3) { animation-delay: 0.15s; }
+    .figure-card:nth-child(4) { animation-delay: 0.2s; }
+    .figure-card:nth-child(5) { animation-delay: 0.25s; }
+    .figure-card:nth-child(6) { animation-delay: 0.3s; }
+    .figure-card:nth-child(7) { animation-delay: 0.35s; }
+    .figure-card:nth-child(8) { animation-delay: 0.4s; }
+    .figure-card:nth-child(9) { animation-delay: 0.45s; }
+    .figure-card:nth-child(10) { animation-delay: 0.5s; }
+    .figure-card:nth-child(11) { animation-delay: 0.55s; }
+    .figure-card:nth-child(12) { animation-delay: 0.6s; }
+    .figure-card:nth-child(13) { animation-delay: 0.05s; }
+    .figure-card:nth-child(14) { animation-delay: 0.1s; }
+    .figure-card:nth-child(15) { animation-delay: 0.15s; }
+    .figure-card:nth-child(16) { animation-delay: 0.2s; }
+    .figure-card:nth-child(17) { animation-delay: 0.25s; }
+    .figure-card:nth-child(18) { animation-delay: 0.3s; }
+    .figure-card:nth-child(19) { animation-delay: 0.35s; }
+    .figure-card:nth-child(20) { animation-delay: 0.4s; }
+    .figure-card:nth-child(21) { animation-delay: 0.45s; }
+    .figure-card:nth-child(22) { animation-delay: 0.5s; }
+    .figure-name { font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; margin-bottom: 6px; color: var(--text-dark); transition: var(--transition);}
+    .figure-card:hover .figure-name { color: #fff; }
+    .figure-era { font-size: .85rem; color: var(--text-light); margin-bottom: 16px; transition: var(--transition); font-weight: 500;}
+    .figure-card:hover .figure-era { color: rgba(255,255,255,0.7); }
+    .figure-theory {
+      font-size: .85rem; color: var(--blue-700);
+      background: var(--blue-100); padding: 8px 16px;
+      border-radius: 99px; font-weight: 700; transition: var(--transition);
+      display: inline-block;
+    }
+    .figure-card:hover .figure-theory { background: rgba(255,255,255,0.2); color: #fff; }
+
+    /* modal */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 3000;
+      background: rgba(15, 23, 42, 0.8);
+      backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 20px;
+      opacity: 0; visibility: hidden;
+      transition: var(--transition-smooth);
+    }
+    .modal-overlay.open { opacity: 1; visibility: visible; }
+    .modal-box {
+      background: #fff; border-radius: var(--radius-lg);
+      max-width: 650px; width: 100%; max-height: 90vh; overflow-y: auto;
+      box-shadow: 0 40px 100px rgba(0,0,0,0.4);
+      transform: scale(0.9) translateY(30px); opacity: 0;
+      transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .modal-overlay.open .modal-box { transform: scale(1) translateY(0); opacity: 1; }
+    .modal-header {
+      background: var(--gradient-hero); padding: 40px;
+      position: relative; text-align: center;
+    }
+    .modal-close {
+      position: absolute; top: 20px; right: 20px;
+      width: 40px; height: 40px; background: rgba(255,255,255,.2);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 1.5rem; transition: var(--transition);
+    }
+    .modal-close:hover { background: #fff; color: var(--blue-700); transform: rotate(90deg) scale(1.1); }
+    .modal-avatar {
+      width: 110px; height: 110px;
+      border-radius: 50%; overflow: hidden;
+      margin: 0 auto 20px; border: 4px solid #fff; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      background: rgba(255,255,255,.2);
+    }
+    .modal-avatar img { width: 100%; height: 100%; object-fit: cover; object-position: top center; display: block; }
+    .modal-name { font-family: var(--font-display); font-size: 2.2rem; color: #fff; font-weight: 700; line-height: 1;}
+    .modal-era { color: var(--blue-200); font-size: 1rem; margin-top: 8px; font-weight: 600; letter-spacing: 1px;}
+    .modal-body { padding: 40px; }
+    .modal-section-title {
+      font-size: .85rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px;
+      color: var(--blue-500); margin-bottom: 12px; display: flex; align-items: center; gap: 8px;
+    }
+    .modal-section-title::before { content: ''; width: 20px; height: 3px; background: var(--blue-500); border-radius: 10px; }
+    .modal-section-title:not(:first-child) { margin-top: 30px; }
+    .modal-text { font-size: 1rem; color: var(--text-mid); line-height: 1.8; }
+    .modal-quote {
+      background: #F8FCFF; border-left: 6px solid var(--blue-400);
+      padding: 20px 24px; border-radius: 0 var(--radius-md) var(--radius-md) 0;
+      font-family: var(--font-display); font-style: italic; font-size: 1.2rem;
+      color: var(--blue-700); margin-top: 16px; box-shadow: 0 5px 15px rgba(44,82,130,0.05);
+    }
+
+    /* ============================================================
+       PSYCHOLOGICAL DISORDERS
+    ============================================================ */
+    #disorders { background: #fff; position: relative; }
+    .disorder-tabs {
+      display: flex; flex-wrap: nowrap; gap: 8px; margin-bottom: 40px;
+      background: var(--blue-50); padding: 8px; border-radius: var(--radius-md);
+      max-width: 100%; margin-left: auto; margin-right: auto;
+      overflow-x: auto; scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .disorder-tabs::-webkit-scrollbar { display: none; }
+
+    .disorder-tab {
+      padding: 10px 20px; border-radius: 99px; font-size: 0.88rem; font-weight: 700;
+      color: var(--text-mid); transition: var(--transition); position: relative; z-index: 1;
+      white-space: nowrap; flex-shrink: 0; scroll-snap-align: start;
+    }
+    .disorder-tab.active { color: #fff; }
+    .disorder-tab::before {
+      content: ''; position: absolute; inset: 0; background: var(--blue-700); border-radius: 99px;
+      z-index: -1; opacity: 0; transform: scale(0.8); transition: var(--transition-smooth);
+    }
+    .disorder-tab.active::before { opacity: 1; transform: scale(1); box-shadow: 0 8px 20px rgba(44,82,130,.3); }
+    .disorder-tab:hover:not(.active) { color: var(--blue-700); background: rgba(255,255,255,0.5); }
+    
+    .disorder-panel { display: none; animation: fadeIn 0.6s ease; }
+    .disorder-panel.active { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    
+    .disorder-content {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: stretch;
+      background: #F8FCFF; border-radius: var(--radius-lg); border: 1px solid var(--blue-50);
+      box-shadow: 0 20px 50px rgba(44,82,130,.05); overflow: hidden;
+    }
+    .disorder-info { padding: 40px; }
+    .disorder-name { font-family: var(--font-display); font-size: 2.5rem; font-weight: 800; margin-bottom: 4px; color: var(--blue-900); }
+    .disorder-name-id { font-size: 1rem; color: var(--blue-500); margin-bottom: 24px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;}
+    .disorder-desc { font-size: 1.05rem; color: var(--text-mid); line-height: 1.8; margin-bottom: 30px; }
+    .disorder-list-title { font-weight: 800; font-size: .9rem; text-transform: uppercase; letter-spacing: 2px; color: var(--blue-700); margin-bottom: 16px; }
+    .disorder-list { display: flex; flex-direction: column; gap: 12px; }
+    .disorder-list-item { display: flex; align-items: flex-start; gap: 12px; font-size: 1rem; color: var(--text-mid); line-height: 1.6; }
+    .disorder-bullet { width: 24px; height: 24px; min-width: 24px; background: var(--blue-100); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: .75rem; color: var(--blue-700); font-weight: 800; margin-top: 2px; }
+    
+    .disorder-visual { background: var(--gradient-hero); padding: 40px; display: flex; flex-direction: column; justify-content: center; position: relative; overflow: hidden;}
+    .disorder-visual::before { content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%; background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 60%); animation: rotateBg 20s linear infinite;}
+    @keyframes rotateBg { to { transform: rotate(360deg); } }
+    .disorder-emoji { font-size: 6rem; text-align: center; margin-bottom: 30px; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.2)); animation: float 3s ease-in-out infinite alternate;}
+    @keyframes float { from { transform: translateY(0); } to { transform: translateY(-15px); } }
+    
+    .disorder-stat-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; position: relative; z-index: 2;}
+    .disorder-stat-card { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.2); border-radius: var(--radius-md); padding: 24px; text-align: center; color: #fff;}
+    .disorder-stat-num { font-size: 2.2rem; font-weight: 900; color: #fff; line-height: 1; margin-bottom: 4px; text-shadow: 0 4px 10px rgba(0,0,0,0.2);}
+    .disorder-stat-label { font-size: .8rem; color: rgba(255,255,255,.8); font-weight: 600; text-transform: uppercase; letter-spacing: 1px;}
+    .disorder-help { background: #fff; border-radius: var(--radius-md); padding: 24px; text-align: center; margin-top: 24px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); position: relative; z-index: 2;}
+    .disorder-help-title { font-weight: 800; margin-bottom: 8px; font-size: 1rem; color: var(--blue-700); text-transform: uppercase; letter-spacing: 1px;}
+    .disorder-help-text { font-size: .95rem; color: var(--text-mid); line-height: 1.6; }
+
+    /* ============================================================
+       MOOD TRACKER
+    ============================================================ */
+    #mood-tracker { background: var(--gradient-soft); }
+    .mood-tracker-wrap { max-width: 800px; margin: 0 auto; background: #fff; padding: 50px; border-radius: var(--radius-lg); box-shadow: 0 20px 60px rgba(44,82,130,.08); border: 1px solid #fff;}
+    .mood-question { font-family: var(--font-display); font-size: 2rem; font-weight: 700; text-align: center; margin-bottom: 40px; color: var(--blue-900); }
+    .mood-emojis { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-bottom: 40px; }
+    .mood-emoji-btn {
+      display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 20px 10px;
+      border-radius: var(--radius-md); border: 2px solid transparent; background: #F8FCFF;
+      transition: var(--transition-smooth); width: 90px; cursor: pointer;
+    }
+    .mood-emoji-btn:hover { transform: translateY(-10px); background: #fff; box-shadow: 0 15px 30px rgba(44,82,130,.1); border-color: var(--blue-100);}
+    .mood-emoji-btn.selected { border-color: var(--blue-500); background: var(--blue-50); transform: translateY(-10px) scale(1.1); box-shadow: 0 15px 30px rgba(44,82,130,.15); }
+    .mood-emoji-icon { font-size: 3rem; transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+    .mood-emoji-btn:hover .mood-emoji-icon { transform: scale(1.2); }
+    .mood-emoji-label { font-size: .85rem; font-weight: 700; color: var(--text-mid); }
+    
+    .mood-form-group { position: relative; margin-bottom: 30px; }
+    #mood-note {
+      width: 100%; padding: 20px; border-radius: var(--radius-md); border: 2px solid var(--blue-100);
+      background: #F8FCFF; font-family: inherit; font-size: 1rem; color: var(--text-dark);
+      resize: none; outline: none; transition: var(--transition);
+    }
+    #mood-note:focus { border-color: var(--blue-500); background: #fff; box-shadow: 0 10px 25px rgba(78,168,232,.1); }
+    #save-mood {
+      width: 100%; padding: 18px; background: var(--gradient-hero); color: #fff; border-radius: 99px;
+      font-weight: 800; font-size: 1.1rem; transition: var(--transition); box-shadow: 0 10px 30px rgba(44,82,130,.2);
+      letter-spacing: 1px;
+    }
+    #save-mood:hover { transform: translateY(-3px); box-shadow: 0 15px 40px rgba(44,82,130,.3); }
+    
+    .mood-history { margin-top: 60px; border-top: 2px dashed var(--blue-100); padding-top: 40px;}
+    .mood-history-title { font-size: 1.3rem; font-weight: 800; margin-bottom: 24px; color: var(--blue-900); display: flex; align-items: center; gap: 10px; }
+    .mood-history-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+    .mood-entry {
+      background: #fff; border-radius: var(--radius-md); padding: 20px; display: flex; align-items: flex-start; gap: 16px;
+      box-shadow: 0 5px 15px rgba(44,82,130,.05); border: 1px solid var(--blue-50); transition: var(--transition);
+      animation: slideIn .5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .mood-entry:hover { transform: translateY(-5px); box-shadow: 0 15px 30px rgba(44,82,130,.1); border-color: var(--blue-200);}
+    .mood-entry-emoji { font-size: 2.5rem; background: var(--blue-50); width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; border-radius: 16px;}
+    .mood-entry-info { flex:1; }
+    .mood-entry-mood { font-weight: 800; font-size: 1.1rem; color: var(--text-dark); margin-bottom: 4px;}
+    .mood-entry-date { font-size: .8rem; color: var(--text-light); font-weight: 500;}
+    .mood-entry-note { font-size: .95rem; color: var(--text-mid); margin-top: 10px; font-style: italic; background: #F8FCFF; padding: 10px; border-radius: 8px; border-left: 3px solid var(--blue-300);}
+    .mood-delete {
+      padding: 8px; color: #EF4444; background: #FEF2F2; border-radius: 10px; transition: var(--transition);
+    }
+    .mood-delete:hover { background: #EF4444; color: #fff; transform: rotate(90deg); }
+    
+    .mood-activity-suggest { margin-top: 30px; padding: 30px; background: linear-gradient(135deg, var(--blue-50), #fff); border: 1px solid var(--blue-200); border-radius: var(--radius-lg); display: none; box-shadow: 0 10px 30px rgba(44,82,130,.05);}
+    .mood-activity-suggest.visible { display: block; animation: slideIn .5s cubic-bezier(0.4, 0, 0.2, 1); }
+    .suggest-title { font-weight: 800; color: var(--blue-700); margin-bottom: 16px; font-size: 1.1rem; display: flex; align-items: center; gap: 8px;}
+    .suggest-list { display: flex; flex-direction: column; gap: 10px; }
+    .suggest-item { font-size: 1rem; color: var(--text-mid); display: flex; align-items: center; gap: 12px; background: #fff; padding: 12px 16px; border-radius: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.02);}
+
+    /* ============================================================
+       JOURNALING
+    ============================================================ */
+    #journaling { background: #fff; }
+    .journal-layout { display: grid; grid-template-columns: 1.2fr 1fr; gap: 40px; align-items: start;}
+    .journal-editor { background: #F8FCFF; border-radius: var(--radius-lg); padding: 40px; border: 1px solid var(--blue-50); box-shadow: 0 20px 50px rgba(44,82,130,.05);}
+    .journal-editor-title { font-family: var(--font-display); font-size: 1.8rem; font-weight: 700; margin-bottom: 30px; color: var(--blue-900); }
+    
+    .floating-group { position: relative; margin-bottom: 24px; }
+    .floating-input, .floating-textarea {
+      width: 100%; padding: 20px 20px 10px; border-radius: var(--radius-sm); border: 2px solid var(--blue-100);
+      background: #fff; font-family: inherit; font-size: 1.05rem; color: var(--text-dark); outline: none; transition: var(--transition);
+    }
+    .floating-textarea { resize: vertical; min-height: 200px; }
+    .floating-label {
+      position: absolute; top: 18px; left: 20px; font-size: 1rem; color: var(--text-light); transition: var(--transition); pointer-events: none;
+    }
+    .floating-input:focus, .floating-textarea:focus { border-color: var(--blue-500); box-shadow: 0 10px 25px rgba(78,168,232,.1); }
+    .floating-input:focus ~ .floating-label, .floating-input:not(:placeholder-shown) ~ .floating-label,
+    .floating-textarea:focus ~ .floating-label, .floating-textarea:not(:placeholder-shown) ~ .floating-label {
+      top: 6px; font-size: 0.75rem; color: var(--blue-500); font-weight: 700;
+    }
+
+    .journal-mood-select { margin-bottom: 30px; }
+    .journal-mood-label { font-size: .9rem; font-weight: 700; color: var(--text-mid); margin-bottom: 12px; display: block; text-transform: uppercase; letter-spacing: 1px;}
+    .journal-mood-row { display: flex; gap: 12px; flex-wrap: wrap; }
+    .journal-mood-opt {
+      width: 50px; height: 50px; border-radius: 50%; font-size: 1.5rem; display: flex; align-items: center; justify-content: center;
+      background: #fff; border: 2px solid var(--blue-100); cursor: pointer; transition: var(--transition-smooth);
+    }
+    .journal-mood-opt:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.05); }
+    .journal-mood-opt.sel { background: var(--blue-700); border-color: var(--blue-700); transform: translateY(-5px) scale(1.1); box-shadow: 0 10px 25px rgba(44,82,130,.2); }
+    
+    #save-journal { width: 100%; padding: 18px; background: var(--blue-700); color: #fff; border-radius: 99px; font-weight: 800; font-size: 1.1rem; transition: var(--transition); letter-spacing: 1px; box-shadow: 0 10px 25px rgba(44,82,130,.2);}
+    #save-journal:hover { background: var(--blue-500); transform: translateY(-3px); box-shadow: 0 15px 35px rgba(44,82,130,.3); }
+    
+    .journal-list-section { background: #fff; border-radius: var(--radius-lg); padding: 40px; box-shadow: 0 20px 50px rgba(44,82,130,.05); border: 1px solid var(--blue-50); height: 100%;}
+    .journal-list-title { font-size: 1.3rem; font-weight: 800; margin-bottom: 24px; color: var(--blue-900); display: flex; justify-content: space-between; align-items: center;}
+    .journal-count-badge { background: var(--blue-100); color: var(--blue-700); padding: 4px 12px; border-radius: 99px; font-size: 0.9rem;}
+    .journal-entries { display: flex; flex-direction: column; gap: 16px; max-height: 600px; overflow-y: auto; padding-right: 10px; }
+    /* Custom Scrollbar for entries */
+    .journal-entries::-webkit-scrollbar { width: 6px; }
+    .journal-entries::-webkit-scrollbar-thumb { background: var(--blue-200); border-radius: 10px; }
+    
+    .journal-entry {
+      background: #fff; border-radius: var(--radius-md); padding: 24px; border: 1px solid var(--blue-100);
+      cursor: pointer; transition: var(--transition); position: relative; box-shadow: 0 5px 15px rgba(0,0,0,0.02);
+    }
+    .journal-entry:hover { border-color: var(--blue-400); transform: translateX(10px); box-shadow: 0 10px 25px rgba(44,82,130,.1); }
+    .journal-entry-header { display: flex; align-items: center; gap: 16px; margin-bottom: 12px; }
+    .journal-entry-emoji { font-size: 2rem; background: var(--blue-50); width: 50px; height: 50px; display: flex; justify-content: center; align-items: center; border-radius: 12px;}
+    .journal-entry-meta { flex:1; }
+    .journal-entry-title-text { font-weight: 800; font-size: 1.1rem; color: var(--text-dark); margin-bottom: 4px;}
+    .journal-entry-date-text { font-size: .8rem; color: var(--text-light); font-weight: 500;}
+    .journal-entry-preview { font-size: .95rem; color: var(--text-mid); line-height: 1.6; }
+    .journal-entry-delete {
+      position: absolute; top: 20px; right: 20px; color: #EF4444; background: #FEF2F2; width: 35px; height: 35px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
+      transition: var(--transition); opacity: 0; transform: scale(0.8);
+    }
+    .journal-entry:hover .journal-entry-delete { opacity: 1; transform: scale(1); }
+    .journal-entry-delete:hover { background: #EF4444; color: #fff; }
+    .journal-empty { text-align: center; padding: 60px 20px; color: var(--text-light); }
+    .journal-empty-icon { font-size: 4rem; margin-bottom: 20px; opacity: 0.5;}
+
+    /* ============================================================
+       MINDFULNESS / BREATHING
+    ============================================================ */
+    #mindfulness { background: var(--gradient-hero); padding: 120px 5%; position: relative; overflow: hidden;}
+    /* Abstract shapes background */
+    #mindfulness::before { content:''; position: absolute; top: -20%; right: -10%; width: 500px; height: 500px; background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%); border-radius: 50%; }
+    #mindfulness::after { content:''; position: absolute; bottom: -20%; left: -10%; width: 400px; height: 400px; background: radial-gradient(circle, rgba(78,168,232,0.2) 0%, transparent 70%); border-radius: 50%; }
+    
+    .mindful-wrap { max-width: 700px; margin: 0 auto; text-align: center; position: relative; z-index: 2;}
+    #mindfulness .section-badge { background: rgba(255,255,255,.15); color: #fff; border-color: rgba(255,255,255,0.3); backdrop-filter: blur(10px);}
+    #mindfulness .section-title { color: #fff; }
+    #mindfulness .section-subtitle { color: rgba(255,255,255,.8); font-weight: 300; }
+    
+    .breath-method-tabs { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 50px; background: rgba(255,255,255,0.1); padding: 8px; border-radius: 99px; backdrop-filter: blur(10px); max-width: 100%; margin-inline: auto; box-sizing: border-box;}
+    .breath-method-tab { padding: 12px 24px; border-radius: 99px; font-size: .9rem; font-weight: 700; color: rgba(255,255,255,.7); transition: var(--transition); letter-spacing: 1px;}
+    .breath-method-tab.active { background: #fff; color: var(--blue-700); box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
+    .breath-method-tab:hover:not(.active) { color: #fff; }
+
+    .breath-container { margin: 60px auto 0; position: relative; width: 300px; height: 300px; display: flex; align-items: center; justify-content: center; }
+    .breath-ring { position: absolute; border-radius: 50%; border: 2px solid rgba(255,255,255,.1); animation: ringPulse 8s ease-in-out infinite; }
+    .breath-ring-1 { width: 300px; height: 300px; animation-delay: 0s; border-color: rgba(255,255,255,0.2); }
+    .breath-ring-2 { width: 250px; height: 250px; animation-delay: .3s; }
+    .breath-ring-3 { width: 200px; height: 200px; animation-delay: .6s; }
+    @keyframes ringPulse { 0%,100%{opacity:.2; transform: scale(1)} 50%{opacity:.6; transform: scale(1.05)} }
+    
+    .breath-circle {
+      width: 160px; height: 160px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.1) 100%);
+      border: 1px solid rgba(255,255,255,0.6);
+      backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px);
+      box-shadow: 0 0 40px rgba(255,255,255,0.3), inset 0 0 20px rgba(255,255,255,0.5);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      z-index: 2; position: relative;
+      transition: transform 1s cubic-bezier(.4,0,.2,1), box-shadow 1s ease;
+    }
+    .breath-circle.inhale { transform: scale(1.6); box-shadow: 0 0 80px rgba(255,255,255,0.6), inset 0 0 30px rgba(255,255,255,0.8); }
+    .breath-circle.hold { transform: scale(1.6); box-shadow: 0 0 60px rgba(167,216,255,0.6); }
+    .breath-circle.exhale { transform: scale(1); box-shadow: 0 0 20px rgba(255,255,255,0.2); }
+    .breath-phase { font-size: 1.1rem; font-weight: 800; color: #fff; letter-spacing: 2px; text-transform: uppercase; text-shadow: 0 2px 5px rgba(0,0,0,0.2);}
+    .breath-count { font-size: 3.5rem; font-weight: 900; color: #fff; line-height: 1; margin-top: 5px; text-shadow: 0 2px 10px rgba(0,0,0,0.3);}
+    
+    .breath-progress { width: 100%; max-width: 400px; height: 6px; background: rgba(255,255,255,.1); border-radius: 99px; margin: 50px auto 0; overflow: hidden; box-shadow: inset 0 1px 3px rgba(0,0,0,0.2);}
+    .breath-progress-bar { height: 100%; background: #fff; border-radius: 99px; transition: width .1s linear; width: 0; box-shadow: 0 0 10px #fff;}
+    .breath-instructions { color: rgba(255,255,255,.9); font-size: 1.05rem; margin-top: 24px; min-height: 48px;}
+    .breath-controls { display: flex; justify-content: center; gap: 16px; margin-top: 30px; }
+    .breath-btn { padding: 16px 36px; border-radius: 99px; font-size: 1rem; font-weight: 800; letter-spacing: 1px; transition: var(--transition); text-transform: uppercase;}
+    .breath-btn-start { background: #fff; color: var(--blue-700); box-shadow: 0 10px 25px rgba(0,0,0,.15); }
+    .breath-btn-start:hover { transform: translateY(-4px); box-shadow: 0 15px 35px rgba(0,0,0,.25); }
+    .breath-btn-stop { background: rgba(255,255,255,.1); border: 2px solid rgba(255,255,255,.4); color: #fff; }
+    .breath-btn-stop:hover { background: rgba(255,255,255,.2); border-color: #fff; }
+    .breath-cycles { color: rgba(255,255,255,.6); font-size: 1rem; margin-top: 20px; font-weight: 600; letter-spacing: 2px;}
+
+    /* ============================================================
+       QUIZ
+    ============================================================ */
+    #quiz { background: var(--gradient-soft); }
+    .quiz-wrap { max-width: 800px; margin: 0 auto; background: #fff; border-radius: var(--radius-lg); padding: 50px; box-shadow: 0 20px 60px rgba(44,82,130,.08); border: 1px solid #fff;}
+    .quiz-progress-bar { width: 100%; height: 8px; background: var(--blue-50); border-radius: 99px; margin-bottom: 40px; overflow: hidden; }
+    .quiz-progress-fill { height: 100%; background: var(--gradient-hero); border-radius: 99px; transition: width 0.5s cubic-bezier(0.34, 1.56, 0.64, 1); }
+    .quiz-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;}
+    .quiz-question-num { font-size: .9rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; color: var(--blue-500); background: var(--blue-50); padding: 6px 16px; border-radius: 99px;}
+    .quiz-score-display { font-size: 1rem; font-weight: 700; color: var(--text-mid); }
+    .quiz-question-text { font-family: var(--font-display); font-size: 1.8rem; font-weight: 700; color: var(--blue-900); margin-bottom: 30px; line-height: 1.4; }
+    
+    .quiz-options { display: flex; flex-direction: column; gap: 16px; }
+    .quiz-option {
+      padding: 20px 24px; border-radius: var(--radius-md); border: 2px solid var(--blue-100);
+      background: #F8FCFF; text-align: left; font-size: 1.05rem; color: var(--text-dark); font-weight: 600;
+      transition: var(--transition-smooth); display: flex; align-items: center; gap: 16px; cursor: pointer;
+    }
+    .quiz-option:hover:not(:disabled) { border-color: var(--blue-500); background: #fff; transform: translateX(10px); box-shadow: 0 10px 20px rgba(44,82,130,.1); }
+    .quiz-option.correct { border-color: #10B981; background: #ECFDF5; color: #065F46; transform: scale(1.02); box-shadow: 0 10px 25px rgba(16,185,129,.2);}
+    .quiz-option.wrong { border-color: #EF4444; background: #FEF2F2; color: #991B1B; opacity: 0.7;}
+    .quiz-option-icon {
+      width: 36px; height: 36px; min-width: 36px; border-radius: 50%; background: #fff; border: 2px solid var(--blue-200);
+      display: flex; align-items: center; justify-content: center; font-size: 1rem; font-weight: 800; color: var(--blue-500);
+      transition: var(--transition);
+    }
+    .quiz-option:hover:not(:disabled) .quiz-option-icon { background: var(--blue-500); color: #fff; border-color: var(--blue-500); }
+    .quiz-option.correct .quiz-option-icon { background: #10B981; border-color: #10B981; color: #fff; }
+    .quiz-option.wrong .quiz-option-icon { background: #EF4444; border-color: #EF4444; color: #fff; }
+    
+    .quiz-explanation {
+      margin-top: 24px; padding: 20px 24px; background: var(--blue-50); border-left: 6px solid var(--blue-500);
+      border-radius: 0 var(--radius-md) var(--radius-md) 0; font-size: 1rem; color: var(--blue-900); line-height: 1.6;
+      display: none; animation: slideIn 0.5s ease;
+    }
+    .quiz-explanation.visible { display: block; }
+    .quiz-nav { display: flex; justify-content: flex-end; margin-top: 30px; }
+    .quiz-btn-next { padding: 16px 40px; border-radius: 99px; font-weight: 800; font-size: 1.1rem; background: var(--blue-700); color: #fff; box-shadow: 0 10px 25px rgba(44,82,130,.3); transition: var(--transition); letter-spacing: 1px;}
+    .quiz-btn-next:hover:not(:disabled) { transform: translateY(-3px); background: var(--blue-500); box-shadow: 0 15px 35px rgba(44,82,130,.4); }
+    .quiz-btn-next:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+    
+    .quiz-result { display: none; text-align: center; padding: 20px; }
+    .quiz-result.visible { display: block; animation: slideUpFade 0.8s ease; }
+    .quiz-score-ring {
+      width: 200px; height: 200px; border-radius: 50%; background: var(--gradient-hero);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      margin: 0 auto 40px; box-shadow: 0 20px 50px rgba(44,82,130,.3); border: 8px solid #fff;
+      animation: pulseScore 2s infinite;
+    }
+    @keyframes pulseScore { 0% { box-shadow: 0 0 0 0 rgba(78,168,232, 0.4); } 70% { box-shadow: 0 0 0 30px rgba(78,168,232, 0); } 100% { box-shadow: 0 0 0 0 rgba(78,168,232, 0); } }
+    .quiz-score-num { font-size: 4.5rem; font-weight: 900; color: #fff; line-height: 1; text-shadow: 0 5px 15px rgba(0,0,0,0.2);}
+    .quiz-score-label { font-size: 1.2rem; color: rgba(255,255,255,.8); font-weight: 600; text-transform: uppercase; letter-spacing: 2px; margin-top: 5px;}
+    .quiz-result-msg { font-family: var(--font-display); font-size: 2rem; font-weight: 700; margin-bottom: 12px; color: var(--blue-900); }
+    .quiz-result-sub { font-size: 1.1rem; color: var(--text-mid); margin-bottom: 40px; }
+    .quiz-restart { background: var(--blue-700); color: #fff; padding: 18px 48px; border-radius: 99px; font-weight: 800; font-size: 1.1rem; transition: var(--transition); letter-spacing: 1px; box-shadow: 0 10px 30px rgba(44,82,130,.2);}
+    .quiz-restart:hover { transform: translateY(-5px); background: var(--blue-500); box-shadow: 0 15px 40px rgba(44,82,130,.3); }
+
+    /* Confetti */
+    .confetti { position: fixed; top: -10px; width: 12px; height: 12px; z-index: 9999; animation: fall 4s linear forwards; pointer-events: none; border-radius: 2px;}
+    @keyframes fall { to { transform: translateY(100vh) rotate(720deg); } }
+
+    /* ============================================================
+       SELF-CARE CHECKLIST
+    ============================================================ */
+    #selfcare { background: #fff; }
+    .selfcare-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; }
+    .selfcare-column { background: #F8FCFF; border-radius: var(--radius-lg); padding: 30px; border: 1px solid var(--blue-50); box-shadow: 0 10px 30px rgba(0,0,0,0.02);}
+    .selfcare-column-title { font-family: var(--font-display); font-size: 1.5rem; font-weight: 700; color: var(--blue-900); margin-bottom: 24px; display: flex; align-items: center; gap: 10px; border-bottom: 2px dashed var(--blue-100); padding-bottom: 15px;}
+    .selfcare-list { display: flex; flex-direction: column; gap: 12px; }
+    .selfcare-item {
+      display: flex; align-items: center; gap: 16px; padding: 16px 20px;
+      background: #fff; border-radius: var(--radius-sm); cursor: pointer; transition: var(--transition);
+      border: 2px solid transparent; box-shadow: 0 4px 10px rgba(0,0,0,0.02);
+    }
+    .selfcare-item:hover { border-color: var(--blue-200); transform: translateX(5px); box-shadow: 0 8px 20px rgba(44,82,130,.1); }
+    .selfcare-item.done { background: #ECFDF5; border-color: #A7F3D0; box-shadow: none;}
+    .selfcare-check {
+      width: 28px; height: 28px; min-width: 28px; border-radius: 8px; border: 2px solid var(--blue-300);
+      display: flex; align-items: center; justify-content: center; transition: var(--transition); background: #fff;
+    }
+    .selfcare-item.done .selfcare-check { background: #10B981; border-color: #10B981; color: #fff; transform: scale(1.1) rotate(10deg);}
+    .selfcare-check-icon { font-size: 1rem; opacity: 0; transition: var(--transition); font-weight: 800;}
+    .selfcare-item.done .selfcare-check-icon { opacity: 1; }
+    .selfcare-emoji { font-size: 1.5rem; }
+    .selfcare-text { font-size: 1.05rem; font-weight: 600; color: var(--text-dark); transition: var(--transition); }
+    .selfcare-item.done .selfcare-text { color: #065F46; text-decoration: line-through; opacity: 0.7; }
+    
+    .selfcare-progress-card {
+      grid-column: 1 / -1; background: var(--gradient-hero); border-radius: var(--radius-lg); padding: 40px;
+      display: flex; align-items: center; gap: 40px; flex-wrap: wrap; box-shadow: 0 20px 50px rgba(44,82,130,.2);
+      position: relative; overflow: hidden;
+    }
+    .selfcare-progress-card::after { content: ''; position: absolute; top: 0; right: 0; width: 300px; height: 300px; background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%); border-radius: 50%; transform: translate(30%, -30%);}
+    .selfcare-progress-info { flex: 1; color: #fff; position: relative; z-index: 2;}
+    .selfcare-progress-title { font-family: var(--font-display); font-size: 2rem; font-weight: 700; margin-bottom: 8px; text-shadow: 0 2px 10px rgba(0,0,0,0.2);}
+    .selfcare-progress-sub { font-size: 1.1rem; color: rgba(255,255,255,.8); font-weight: 300; }
+    .selfcare-progress-ring-wrap { position: relative; width: 140px; height: 140px; z-index: 2; filter: drop-shadow(0 10px 20px rgba(0,0,0,0.2));}
+    .selfcare-progress-ring { transform: rotate(-90deg); width: 100%; height: 100%;}
+    .selfcare-progress-circle { fill: none; stroke: rgba(255,255,255,.2); stroke-width: 8; }
+    .selfcare-progress-arc {
+      fill: none; stroke: #fff; stroke-width: 8; stroke-linecap: round;
+      stroke-dasharray: 251.2; stroke-dashoffset: 251.2;
+      transition: stroke-dashoffset 1s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .selfcare-progress-num { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #fff; }
+    .selfcare-pct { font-size: 2.2rem; font-weight: 900; line-height: 1; }
+    .selfcare-pct-label { font-size: .8rem; color: rgba(255,255,255,.8); font-weight: 600; text-transform: uppercase; letter-spacing: 1px;}
+    .selfcare-reset {
+      background: rgba(255,255,255,.2); border: 1px solid rgba(255,255,255,.4); color: #fff; padding: 14px 28px;
+      border-radius: 99px; font-size: 1rem; font-weight: 700; transition: var(--transition); margin-left: auto; z-index: 2;
+    }
+    .selfcare-reset:hover { background: #fff; color: var(--blue-700); transform: translateY(-3px); box-shadow: 0 10px 20px rgba(0,0,0,0.2);}
+
+    /* ============================================================
+       FOOTER
+    ============================================================ */
+    footer { background: var(--blue-900); color: rgba(255,255,255,.7); padding: 80px 5% 40px; position: relative; overflow: hidden;}
+    footer::before { content: ''; position: absolute; top: -50px; left: 0; width: 100%; height: 100px; background: #fff; border-radius: 50% 50% 0 0 / 100% 100% 0 0;}
+    .footer-grid { display: grid; grid-template-columns: 2.5fr 1fr 1fr 1.5fr; gap: 50px; margin-bottom: 60px; position: relative; z-index: 2;}
+    .footer-logo { font-family: var(--font-display); font-size: 2.5rem; color: #fff; font-weight: 700; margin-bottom: 16px; }
+    .footer-desc { font-size: 1rem; line-height: 1.8; margin-bottom: 24px; max-width: 400px; }
+    .footer-socials { display: flex; gap: 12px; }
+    .footer-social {
+      width: 45px; height: 45px; background: rgba(255,255,255,.1); border-radius: 12px;
+      display: flex; align-items: center; justify-content: center; font-size: 1.2rem; transition: var(--transition); color: #fff;
+    }
+    .footer-social:hover { background: var(--blue-500); transform: translateY(-5px) rotate(10deg); box-shadow: 0 10px 20px rgba(0,0,0,0.2);}
+    .footer-col-title { font-size: .95rem; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; color: #fff; margin-bottom: 24px; }
+    .footer-links { display: flex; flex-direction: column; gap: 12px; }
+    .footer-links a { font-size: .95rem; color: rgba(255,255,255,.7); transition: var(--transition); display: inline-block;}
+    .footer-links a:hover { color: #fff; transform: translateX(5px); text-shadow: 0 0 10px rgba(255,255,255,0.5);}
+    .footer-divider { border: none; border-top: 1px solid rgba(255,255,255,.1); margin-bottom: 30px; }
+    .footer-bottom { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
+    .footer-copy { font-size: .9rem; }
+    .footer-note { font-size: .9rem; color: rgba(255,255,255,.5); font-style: italic;}
+
+    /* ============================================================
+       TOAST NOTIFICATION
+    ============================================================ */
+    #toast-container { position: fixed; bottom: 40px; right: 40px; z-index: 5000; display: flex; flex-direction: column; gap: 12px; pointer-events: none; }
+    .toast {
+      background: #fff; color: var(--blue-900); padding: 16px 24px; border-radius: var(--radius-sm); border-left: 6px solid var(--blue-500);
+      font-size: 1rem; font-weight: 700; box-shadow: 0 15px 40px rgba(0,0,0,.15);
+      display: flex; align-items: center; gap: 12px; pointer-events: auto;
+      animation: toastIn .5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    .toast.out { animation: toastOut .4s cubic-bezier(0.4, 0, 0.2, 1) forwards; }
+    .toast-icon { font-size: 1.5rem; }
+    @keyframes toastIn { from{opacity:0;transform:translateX(50px) scale(0.9)} to{opacity:1;transform:translate(0) scale(1)} }
+    @keyframes toastOut { from{opacity:1;transform:scale(1)} to{opacity:0;transform:scale(0.9) translateY(20px)} }
+
+    /* ============================================================
+       RESPONSIVE
+    ============================================================ */
+
+    /* --- Tablet Landscape (≤1024px) --- */
+    @media (max-width: 1024px) {
+      .nav-links { display: none; }
+      #hamburger { display: flex; }
+      .footer-grid { grid-template-columns: 2fr 1fr 1fr; }
+      .hero-title { font-size: 3.5rem; }
+      .figures-grid { grid-template-columns: repeat(3, 1fr); gap: 20px; }
+    }
+
+    /* --- Tablet Portrait (≤768px) --- */
+    @media (max-width: 768px) {
+      section { padding: 70px 6%; }
+
+      .hero-visual { display: none; }
+      .hero-content { max-width: 100%; text-align: center; }
+      .hero-badge { justify-content: center; }
+      .hero-buttons { justify-content: center; flex-wrap: wrap; gap: 14px; }
+      .hero-stats { justify-content: center; gap: 24px; flex-wrap: wrap; }
+      .hero-stat::after { display: none; }
+      .hero-title { font-size: 2.8rem; }
+      .hero-desc { font-size: 1.05rem; }
+
+      .section-title { font-size: 2.2rem; }
+      .section-desc { font-size: 1rem; }
+
+      .edu-grid { grid-template-columns: repeat(2, 1fr); }
+      .myth-grid { grid-template-columns: repeat(2, 1fr); }
+      .figures-grid { grid-template-columns: repeat(2, 1fr); gap: 20px; }
+
+      .disorder-content { grid-template-columns: 1fr; }
+      .disorder-tabs { width: 100%; border-radius: var(--radius-md); flex-wrap: wrap; justify-content: center; }
+      .disorder-tab { flex: 1 1 auto; text-align: center; padding: 10px 16px; font-size: 0.9rem; }
+
+      .journal-layout { grid-template-columns: 1fr; }
+      .selfcare-layout { grid-template-columns: 1fr; }
+
+      .footer-grid { grid-template-columns: 1fr 1fr; gap: 30px; }
+
+      .myth-card { height: 300px; }
+    }
+
+    /* --- Mobile (≤480px) --- */
+    @media (max-width: 480px) {
+      section { padding: 55px 5%; }
+
+      .hero-title { font-size: 2rem; line-height: 1.2; }
+      .hero-desc { font-size: 0.95rem; }
+      .hero-buttons { flex-direction: column; width: 100%; gap: 12px; }
+      .hero-buttons .btn-primary,
+      .hero-buttons .btn-secondary { width: 100%; justify-content: center; }
+      .hero-stats { gap: 16px; }
+      .hero-stat-num { font-size: 1.8rem; }
+
+      .section-title { font-size: 1.75rem; }
+      .section-desc { font-size: 0.9rem; }
+
+      .edu-grid { grid-template-columns: 1fr; }
+      .myth-grid { grid-template-columns: 1fr; }
+      .figures-grid { grid-template-columns: repeat(2, 1fr); gap: 14px; }
+      .figure-card { padding: 24px 16px; }
+      .figure-avatar { width: 90px; height: 90px; }
+      .figure-name { font-size: 1.1rem; }
+
+      .disorder-tab { font-size: 0.85rem; padding: 8px 12px; flex: 1 1 auto; min-width: 0; text-align: center; }
+
+      .breath-method-tabs { gap: 8px; padding: 6px; border-radius: var(--radius-md); }
+      .breath-method-tab { padding: 10px 16px; font-size: 0.82rem; letter-spacing: 0.5px; flex: 1 1 auto; text-align: center; }
+
+      .mood-options { gap: 8px; flex-wrap: wrap; justify-content: center; }
+      .mood-btn { width: 52px; height: 52px; font-size: 1.6rem; }
+
+      .mood-tracker-wrap,
+      .journal-editor,
+      .journal-list-section,
+      .quiz-wrap,
+      .selfcare-column { padding: 22px 14px; }
+
+      .footer-grid { grid-template-columns: 1fr; gap: 28px; }
+
+      .breath-container,
+      .breath-ring-1 { width: 210px; height: 210px; }
+      .breath-ring-2 { width: 170px; height: 170px; }
+      .breath-ring-3 { width: 130px; height: 130px; }
+      .breath-circle { width: 90px; height: 90px; font-size: 0.9rem; }
+
+      .selfcare-progress-card { flex-direction: column; text-align: center; gap: 14px; padding: 18px; }
+      .selfcare-reset { margin: 0 auto; width: 100%; justify-content: center; }
+      .selfcare-item { padding: 11px 13px; }
+
+      .modal-overlay { padding: 12px; }
+      .modal-box { border-radius: var(--radius-md); }
+      .modal-header { padding: 24px 18px; }
+      .modal-body { padding: 18px; }
+      .modal-name { font-size: 1.7rem; }
+      .modal-avatar { width: 90px; height: 90px; }
+      .modal-quote { font-size: 1rem; padding: 16px 18px; }
+
+      .quiz-options { grid-template-columns: 1fr; }
+      .quiz-option { padding: 14px 16px; font-size: 0.95rem; }
+
+      #toast-container { right: 14px; left: 14px; bottom: 16px; align-items: center; }
+      .toast { width: 100%; max-width: unset; padding: 11px 14px; font-size: 0.88rem; justify-content: center; }
+
+      #back-to-top { bottom: 16px; left: 16px; width: 42px; height: 42px; font-size: 1.1rem; }
+    }
+
+    /* --- Small Mobile (≤360px) --- */
+    @media (max-width: 360px) {
+      .hero-title { font-size: 1.75rem; }
+      .figures-grid { grid-template-columns: 1fr; }
+      .figure-card { padding: 20px 14px; }
+    }
+    /* scrollbar */
+    ::-webkit-scrollbar { width: 8px; }
+    ::-webkit-scrollbar-track { background: var(--bg-page); }
+    ::-webkit-scrollbar-thumb { background: var(--blue-200); border-radius: 99px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--blue-500); }
+
+    /* back to top */
+    #back-to-top {
+      position: fixed; bottom: 40px; left: 40px; width: 50px; height: 50px;
+      background: var(--bg-card); color: var(--blue-700); border-radius: 50%; border: 2px solid var(--blue-200);
+      display: flex; align-items: center; justify-content: center; font-size: 1.5rem; font-weight: bold;
+      box-shadow: 0 10px 25px rgba(44,82,130,.2); opacity: 0; visibility: hidden; z-index: 999;
+      transition: var(--transition-smooth); cursor: pointer;
+    }
+    #back-to-top.visible { opacity: 1; visibility: visible; }
+    #back-to-top:hover { transform: translateY(-8px); background: var(--blue-700); color: #fff; border-color: var(--blue-700); box-shadow: 0 15px 35px rgba(44,82,130,.3);}
+
+    /* ============================================================
+       DARK MODE OVERRIDES
+    ============================================================ */
+    [data-theme="dark"] #education { background: var(--bg-section-alt); }
+    [data-theme="dark"] #myth-fact { background: var(--bg-section); }
+    [data-theme="dark"] #disorders { background: var(--bg-section); }
+    [data-theme="dark"] footer { background: #020b18; }
+    [data-theme="dark"] footer::before { background: var(--bg-section); }
+    [data-theme="dark"] .edu-card { background: var(--bg-card); border-color: var(--border-card); box-shadow: 0 10px 30px rgba(0,0,0,.3); }
+    [data-theme="dark"] .edu-card:hover { box-shadow: 0 20px 40px rgba(0,0,0,.4); }
+    [data-theme="dark"] .myth-front { background: linear-gradient(135deg, #1a0a0a, #2d1515); border-color: #5a2020; }
+    [data-theme="dark"] .myth-back { background: linear-gradient(135deg, #0a1a0a, #0d2a10); border-color: #1a5a25; }
+    [data-theme="dark"] .myth-text, [data-theme="dark"] .fact-text { color: rgba(255,255,255,0.85); }
+    [data-theme="dark"] .figure-card { background: var(--bg-card); border-color: var(--border-card); }
+    [data-theme="dark"] .disorder-tabs { background: var(--blue-100); }
+    [data-theme="dark"] .disorder-stat-card { background: var(--blue-100); }
+    [data-theme="dark"] .disorder-info { background: var(--bg-card); border-color: var(--border-card); }
+    [data-theme="dark"] .symptom-item { background: var(--blue-100); }
+    [data-theme="dark"] .mood-tracker-wrap,
+    [data-theme="dark"] .journal-editor,
+    [data-theme="dark"] .journal-list-section,
+    [data-theme="dark"] .quiz-wrap,
+    [data-theme="dark"] .selfcare-column { background: var(--bg-card); border-color: var(--border-card); }
+    [data-theme="dark"] .journal-entry { background: var(--bg-section); border-color: var(--border-card); }
+    [data-theme="dark"] .journal-entry:hover { background: var(--bg-card); }
+    [data-theme="dark"] textarea, [data-theme="dark"] input[type="text"] { background: var(--bg-section); border-color: var(--input-border); color: var(--text-dark); }
+    [data-theme="dark"] .quiz-option { background: var(--bg-section); border-color: var(--border-card); color: var(--text-dark); }
+    [data-theme="dark"] .quiz-option:hover { border-color: var(--blue-400); background: var(--blue-100); }
+    [data-theme="dark"] .selfcare-item { background: var(--bg-section); border-color: var(--border-card); }
+    [data-theme="dark"] .selfcare-item.done { background: var(--blue-100); }
+    [data-theme="dark"] .selfcare-progress-card { background: var(--bg-card); }
+    [data-theme="dark"] .selfcare-reset { background: var(--bg-section); color: var(--text-mid); border-color: var(--border-card); }
+    [data-theme="dark"] .modal-box { background: var(--bg-card); }
+    [data-theme="dark"] .modal-quote { background: var(--blue-100); }
+    [data-theme="dark"] .modal-text { color: var(--text-mid); }
+    [data-theme="dark"] .section-badge { background: var(--blue-200); color: var(--blue-400); }
+    [data-theme="dark"] .edu-tag { background: var(--blue-100); color: var(--blue-400); border-color: var(--blue-200); }
+    [data-theme="dark"] .figure-theory { background: var(--blue-200); color: var(--blue-400); }
+    [data-theme="dark"] .toast { background: var(--bg-card); color: var(--text-dark); }
+    [data-theme="dark"] #navbar.scrolled { background: rgba(10,22,40,0.92); border-color: rgba(255,255,255,0.1); }
+    [data-theme="dark"] #navbar.scrolled .nav-logo { color: var(--blue-400); }
+    [data-theme="dark"] #navbar.scrolled .nav-links a { color: var(--text-mid); }
+    [data-theme="dark"] #mobile-nav { background: #060f1e; }
+    [data-theme="dark"] .mobile-nav-link { color: var(--text-mid); border-color: var(--border-card); }
+    [data-theme="dark"] .mobile-nav-link:hover { background: var(--blue-100); color: var(--blue-400); }
+    [data-theme="dark"] .disorder-tab { color: var(--text-mid); }
+    [data-theme="dark"] .disorder-tab:hover:not(.active) { background: var(--blue-200); color: var(--blue-400); }
+    [data-theme="dark"] .mood-btn { background: var(--blue-100); }
+    [data-theme="dark"] .quiz-result { background: var(--bg-card); border-color: var(--border-card); }
+    [data-theme="dark"] .floating-input, [data-theme="dark"] .floating-textarea, [data-theme="dark"] #mood-note { background: var(--bg-section); border-color: var(--input-border); color: var(--text-dark); }
+    [data-theme="dark"] #daily-quote { background: var(--gradient-hero); }
+    [data-theme="dark"] .mood-activity-suggest { background: var(--bg-card); border-color: var(--border-card); }
+    [data-theme="dark"] #selfcare, [data-theme="dark"] #journaling { background: var(--bg-section); }
+    [data-theme="dark"] .disorder-content { background: var(--bg-card); border-color: var(--border-card); }
+    [data-theme="dark"] .mood-emoji-btn { background: var(--bg-section); border-color: var(--border-card); }
+    [data-theme="dark"] .mood-emoji-btn.selected { background: var(--blue-100); border-color: var(--blue-400); }
+    [data-theme="dark"] .mood-emoji-btn:hover { background: var(--blue-200); }
+    [data-theme="dark"] .journal-mood-opt { background: var(--bg-section); border-color: var(--border-card); }
+    [data-theme="dark"] .journal-mood-opt:hover { background: var(--blue-200); }
+  </style>
+</head>
+<body>
+
+<!-- Scroll Progress -->
+<div class="scroll-progress-container"><div class="scroll-progress-bar" id="scroll-progress"></div></div>
+
+<!-- ============================================================ LOADING ============================================================ -->
+<div id="loading-screen">
+  <div class="loader-logo">Psyrofories</div>
+  <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
+  <div class="loader-tagline">Psychology for Curious Minds</div>
+</div>
+
+<!-- ============================================================ NAVBAR ============================================================ -->
+<nav id="navbar">
+  <a href="#hero" class="nav-logo">Psyrofories</a>
+  <ul class="nav-links">
+    <li><a href="#education">Edukasi</a></li>
+    <li><a href="#myth-fact">Mitos vs Fakta</a></li>
+    <li><a href="#figures">Tokoh</a></li>
+    <li><a href="#disorders">Gangguan</a></li>
+    <li><a href="#mood-tracker">Mood</a></li>
+    <li><a href="#journaling">Jurnal</a></li>
+    <li><a href="#mindfulness">Mindfulness</a></li>
+    <li><a href="#quiz">Quiz</a></li>
+    <li><a href="#selfcare" class="nav-cta btn-ripple">Self-Care</a></li>
+  </ul>
+  <button id="dark-toggle" aria-label="Toggle dark mode" title="Toggle dark mode">
+    <span class="nav-icon sun">☀️</span>
+    <span class="nav-icon moon">🌙</span>
+  </button>
+  <button id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- mobile nav -->
+<div id="mobile-nav">
+  <a href="#education" class="mobile-nav-link">Edukasi</a>
+  <a href="#myth-fact" class="mobile-nav-link">Mitos & Fakta</a>
+  <a href="#figures" class="mobile-nav-link">Tokoh Psikologi</a>
+  <a href="#disorders" class="mobile-nav-link">Gangguan</a>
+  <a href="#mood-tracker" class="mobile-nav-link">Mood Tracker</a>
+  <a href="#journaling" class="mobile-nav-link">Journaling</a>
+  <a href="#mindfulness" class="mobile-nav-link">Mindfulness</a>
+  <a href="#quiz" class="mobile-nav-link">Quiz</a>
+  <a href="#selfcare" class="mobile-nav-link" style="background:var(--blue-700); margin-top:20px;">Self-Care</a>
+</div>
+
+<!-- ============================================================ HERO ============================================================ -->
+<section id="hero">
+  <div class="mesh-bg">
+    <div class="mesh-blob b1"></div>
+    <div class="mesh-blob b2"></div>
+    <div class="mesh-blob b3"></div>
+  </div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      Platform Edukasi Psikologi #1
+    </div>
+    <h1 class="hero-title">
+      Understand Your <em>Mind,</em><br>Transform Your Life
+    </h1>
+    <p class="hero-tagline">
+      Jelajahi dunia psikologi, kenali diri sendiri lebih dalam, dan bangun kesehatan mental yang lebih baik dengan pengalaman interaktif bersama Psyrofories.
+    </p>
+    <div class="hero-buttons">
+      <a href="#education" class="btn-primary btn-ripple">
+        Mulai Belajar
+      </a>
+      <a href="#mood-tracker" class="btn-secondary btn-ripple">
+        Cek Mood Hari Ini
+      </a>
+    </div>
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <div class="hero-stat-num" data-target="10">0<span>+</span></div>
+        <div class="hero-stat-label">Topik Psikologi</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num" data-target="6">0<span></span></div>
+        <div class="hero-stat-label">Tokoh Besar</div>
+      </div>
+      <div class="hero-stat">
+        <div class="hero-stat-num">∞<span></span></div>
+        <div class="hero-stat-label">Hari Lebih Baik</div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div class="glass-card-3d">
+      <div class="hero-card-title">Quote of the Day</div>
+      <div class="hero-card-quote" id="hero-quote-text">"Knowing yourself is the beginning of all wisdom."</div>
+      <div class="hero-card-author" id="hero-quote-author">— Aristotle</div>
+      <div class="hero-mini-cards">
+        <div class="hero-mini-card">
+          <span class="hero-mini-icon">🧘</span>
+          <span>Latihan Mindfulness Interaktif</span>
+        </div>
+        <div class="hero-mini-card">
+          <span class="hero-mini-icon">📊</span>
+          <span>Mood Tracker Berbasis AI</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="hero-scroll-hint" onclick="window.location.href='#daily-quote'">
+    <div class="hero-scroll-dot"></div>
+    <span>Scroll untuk mulai</span>
+  </div>
+</section>
+
+<!-- ============================================================ DAILY QUOTE ============================================================ -->
+<div id="daily-quote">
+  <p class="quote-text reveal" id="daily-quote-text"></p>
+  <p class="quote-author reveal delay-1" id="daily-quote-author"></p>
+  <button id="refresh-quote" class="reveal delay-2 btn-ripple"><span class="quote-icon">↻</span> Quote Baru</button>
+</div>
+
+<!-- ============================================================ EDUCATION ============================================================ -->
+<section id="education">
+  <div class="section-header reveal">
+    <div class="section-badge">Edukasi</div>
+    <h2 class="section-title">Kesehatan Mental <span>Explained</span></h2>
+    <p class="section-subtitle">Pahami konsep fundamental kesehatan mental dengan bahasa yang mudah dimengerti untuk kehidupan sehari-hari yang lebih baik.</p>
+  </div>
+  <div class="edu-grid">
+    <div class="edu-card reveal delay-1">
+      <div class="edu-icon-wrap">🧠</div>
+      <h3 class="edu-title">Apa Itu Kesehatan Mental?</h3>
+      <p class="edu-desc">Kesehatan mental mencakup kesejahteraan emosional, psikologis, dan sosial. Ini mempengaruhi cara kita berpikir, merasa, dan bertindak dalam menghadapi stres.</p>
+      <div class="edu-tags">
+        <span class="edu-tag">Definisi</span>
+        <span class="edu-tag">Fundamental</span>
+      </div>
+    </div>
+    <div class="edu-card reveal delay-2">
+      <div class="edu-icon-wrap">💪</div>
+      <h3 class="edu-title">Resiliensi Psikologis</h3>
+      <p class="edu-desc">Kemampuan luar biasa pikiran untuk beradaptasi dan bangkit dari kesulitan, trauma, atau tragedi. Layaknya otot, resiliensi bisa dilatih dan diperkuat.</p>
+      <div class="edu-tags">
+        <span class="edu-tag">Resiliensi</span>
+        <span class="edu-tag">Adaptasi</span>
+      </div>
+    </div>
+    <div class="edu-card reveal delay-3">
+      <div class="edu-icon-wrap">🤝</div>
+      <h3 class="edu-title">Kekuatan Koneksi</h3>
+      <p class="edu-desc">Manusia adalah makhluk sosial. Memiliki jaringan dukungan dan koneksi emosional yang kuat adalah pelindung alami terbaik untuk jiwa kita.</p>
+      <div class="edu-tags">
+        <span class="edu-tag">Sosial</span>
+        <span class="edu-tag">Empati</span>
+      </div>
+    </div>
+    <div class="edu-card reveal delay-1">
+      <div class="edu-icon-wrap">🌱</div>
+      <h3 class="edu-title">Psikologi Positif</h3>
+      <p class="edu-desc">Bukan sekadar mengobati penyakit, tapi fokus pada apa yang membuat hidup layak dijalani: kekuatan karakter, optimisme, dan kebahagiaan sejati.</p>
+      <div class="edu-tags">
+        <span class="edu-tag">PERMA</span>
+        <span class="edu-tag">Growth</span>
+      </div>
+    </div>
+    <div class="edu-card reveal delay-2">
+      <div class="edu-icon-wrap">🛡️</div>
+      <h3 class="edu-title">Mematahkan Stigma</h3>
+      <p class="edu-desc">Stigma adalah penghalang terbesar pemulihan. Mengubah narasi dari 'lemah' menjadi 'sedang berjuang' menyelamatkan jutaan nyawa setiap hari.</p>
+      <div class="edu-tags">
+        <span class="edu-tag">Awareness</span>
+        <span class="edu-tag">Advokasi</span>
+      </div>
+    </div>
+    <div class="edu-card reveal delay-3">
+      <div class="edu-icon-wrap">⚡</div>
+      <h3 class="edu-title">Neuroplastisitas</h3>
+      <p class="edu-desc">Otak kita bersifat plastis—bisa berubah bentuk sepanjang usia. Melalui kebiasaan baru dan terapi, kita secara harfiah menulis ulang sirkuit otak kita.</p>
+      <div class="edu-tags">
+        <span class="edu-tag">Neurosains</span>
+        <span class="edu-tag">Otak</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ MYTH VS FACT ============================================================ -->
+<section id="myth-fact">
+  <div class="myth-bg-pattern"></div>
+  <div class="section-header reveal">
+    <div class="section-badge">Mitos vs Fakta</div>
+    <h2 class="section-title">Luruskan <span>Miskonsepsi</span></h2>
+    <p class="section-subtitle">Arahkan kursor atau tap pada kartu untuk mengungkap fakta sesungguhnya di balik mitos populer kesehatan mental.</p>
+  </div>
+  <div class="myth-grid" id="myth-grid"></div>
+</section>
+
+<!-- ============================================================ FIGURES ============================================================ -->
+<section id="figures">
+  <div class="section-header reveal">
+    <div class="section-badge">Tokoh</div>
+    <h2 class="section-title">Pemikir <span>Besar Dunia</span></h2>
+    <p class="section-subtitle">Jelajahi pemikiran para pionir yang telah mengubah cara kita memahami kompleksitas pikiran manusia.</p>
+  </div>
+  <div class="figures-grid" id="figures-grid"></div>
+</section>
+
+<!-- figure modal -->
+<div class="modal-overlay" id="figure-modal">
+  <div class="modal-box">
+    <div class="modal-header">
+      <button class="modal-close btn-ripple" id="figure-modal-close">✕</button>
+      <div class="modal-avatar" id="modal-avatar"></div>
+      <div class="modal-name" id="modal-name"></div>
+      <div class="modal-era" id="modal-era"></div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-section-title">Teori Utama</div>
+      <p class="modal-text" id="modal-theory"></p>
+      <div class="modal-section-title">Biografi Singkat</div>
+      <p class="modal-text" id="modal-bio"></p>
+      <div class="modal-section-title">Kontribusi Terbesar</div>
+      <p class="modal-text" id="modal-contribution"></p>
+      <div class="modal-quote" id="modal-quote"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ DISORDERS ============================================================ -->
+<section id="disorders">
+  <div class="section-header reveal">
+    <div class="section-badge">Panduan Diagnosis</div>
+    <h2 class="section-title">Memahami <span>Gangguan Psikologis</span></h2>
+    <p class="section-subtitle">Meningkatkan empati melalui pemahaman yang benar. Pilih tab di bawah untuk mempelajari lebih lanjut.</p>
+  </div>
+  <div class="disorder-tabs reveal" id="disorder-tabs"></div>
+  <div id="disorder-panels" class="reveal delay-1"></div>
+</section>
+
+<!-- ============================================================ MOOD TRACKER ============================================================ -->
+<section id="mood-tracker">
+  <div class="section-header reveal">
+    <div class="section-badge">Mood Tracker</div>
+    <h2 class="section-title">Bagaimana <span>Perasaanmu</span> Hari Ini?</h2>
+    <p class="section-subtitle">Kesadaran emosional adalah kunci. Catat suasana hatimu dan temukan pola berharga untuk kesejahteraanmu.</p>
+  </div>
+  <div class="mood-tracker-wrap reveal delay-1">
+    <div class="mood-question">Pilih emoji yang paling mewakili energimu saat ini:</div>
+    <div class="mood-emojis" id="mood-emojis"></div>
+    
+    <div class="mood-form-group">
+      <textarea id="mood-note" placeholder=" " rows="3" class="floating-textarea"></textarea>
+      <label class="floating-label">Ceritakan sedikit mengapa kamu merasa demikian (Opsional)</label>
+    </div>
+    
+    <button id="save-mood" class="btn-ripple">💾 Simpan Mood & Dapatkan Insight</button>
+    
+    <div class="mood-activity-suggest" id="mood-suggest">
+      <div class="suggest-title">Berdasarkan moodmu, cobalah aktivitas ini:</div>
+      <div class="suggest-list" id="suggest-list"></div>
+    </div>
+    
+    <div class="mood-history">
+      <div class="mood-history-title">
+        📅 Riwayat Perjalanan Emosimu
+        <span id="mood-count" style="font-size:.9rem;color:var(--text-light);font-weight:600; background:var(--blue-50); padding:4px 12px; border-radius:99px;"></span>
+      </div>
+      <div class="mood-history-list" id="mood-history-list"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ JOURNALING ============================================================ -->
+<section id="journaling">
+  <div class="section-header reveal">
+    <div class="section-badge">Journaling Studio</div>
+    <h2 class="section-title">Ruang <span>Aman Pribadimu</span></h2>
+    <p class="section-subtitle">Menulis jurnal secara ekspresif terbukti secara ilmiah mengurangi beban pikiran. Semuanya tersimpan aman di perangkatmu.</p>
+  </div>
+  <div class="journal-layout reveal delay-1">
+    <div class="journal-editor">
+      <div class="journal-editor-title">Tulis Lembar Baru </div>
+      
+      <div class="floating-group">
+        <input type="text" id="journal-title" class="floating-input" placeholder=" " />
+        <label class="floating-label">Beri judul yang menarik...</label>
+      </div>
+      
+      <div class="journal-mood-select">
+        <label class="journal-mood-label">Vibe saat ini:</label>
+        <div class="journal-mood-row" id="journal-mood-row"></div>
+      </div>
+      
+      <div class="floating-group">
+        <textarea id="journal-content" class="floating-textarea" placeholder=" "></textarea>
+        <label class="floating-label">Tumpahkan segala pikiran dan perasaanmu di sini...</label>
+      </div>
+      
+      <button id="save-journal" class="btn-ripple">Simpan ke Arsip</button>
+    </div>
+    
+    <div class="journal-list-section">
+      <div class="journal-list-title">Arsip Memori <span class="journal-count-badge" id="journal-count">0</span></div>
+      <div class="journal-entries" id="journal-entries">
+        <div class="journal-empty">
+          <div class="journal-empty-icon">🍃</div>
+          <p style="font-weight:600; color:var(--text-mid); font-size:1.1rem; margin-bottom:8px;">Arsip masih kosong</p>
+          <p>Mulai tuangkan pikiran pertamamu hari ini.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- journal view modal -->
+<div class="modal-overlay" id="journal-modal">
+  <div class="modal-box" style="background:#F8FCFF;">
+    <div class="modal-header" style="background:var(--gradient-soft); padding: 40px; text-align:left; border-bottom:1px solid var(--blue-100);">
+      <button class="modal-close btn-ripple" id="journal-modal-close" style="background:#fff; color:var(--blue-700); box-shadow:0 4px 10px rgba(0,0,0,0.1);">✕</button>
+      <div style="display:flex; align-items:center; gap:20px;">
+        <div class="modal-avatar" id="jm-emoji" style="margin:0; background:#fff; color:var(--blue-700); box-shadow:0 10px 20px rgba(44,82,130,.1); border:none;"></div>
+        <div>
+          <div class="modal-name" id="jm-title" style="color:var(--blue-900); font-size:1.8rem; margin-bottom:8px;"></div>
+          <div class="modal-era" id="jm-date" style="color:var(--text-mid); margin:0; display:flex; align-items:center; gap:8px;"><span style="font-size:1.2rem;">🕰️</span> <span></span></div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-body" style="padding:40px;">
+      <div id="jm-content" style="font-size: 1.1rem; color: var(--text-dark); line-height: 1.9; white-space: pre-wrap; font-family:var(--font-main);"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ MINDFULNESS ============================================================ -->
+<section id="mindfulness">
+  <div class="mindful-wrap">
+    <div class="section-header reveal" style="margin-bottom:40px">
+      <div class="section-badge">Zen Space</div>
+      <h2 class="section-title" style="color:#fff">Seni <span style="color:var(--blue-200);">Bernapas</span></h2>
+      <p class="section-subtitle">Tenangkan sistem sarafmu secara instan. Ikuti panduan visual ini untuk menyeimbangkan pikiran dan tubuh.</p>
+    </div>
+    
+    <div class="breath-method-tabs reveal delay-1">
+      <button class="breath-method-tab active btn-ripple" data-method="4-7-8" id="tab-478">Teknik 4-7-8</button>
+      <button class="breath-method-tab btn-ripple" data-method="4-4-4" id="tab-444">Box Breathing</button>
+      <button class="breath-method-tab btn-ripple" data-method="4-6-8" id="tab-468">Teknik 4-6-8</button>
+    </div>
+    
+    <div class="reveal delay-2">
+      <div class="breath-container">
+        <div class="breath-ring breath-ring-1"></div>
+        <div class="breath-ring breath-ring-2"></div>
+        <div class="breath-ring breath-ring-3"></div>
+        <div class="breath-circle" id="breath-circle">
+          <span class="breath-phase" id="breath-phase">SIAP</span>
+          <span class="breath-count" id="breath-count">●</span>
+        </div>
+      </div>
+      <div class="breath-progress">
+        <div class="breath-progress-bar" id="breath-progress-bar"></div>
+      </div>
+      <div class="breath-instructions" id="breath-instructions"></div>
+      <div class="breath-controls">
+        <button class="breath-btn breath-btn-start btn-ripple" id="breath-start">▶ Mulai Relaksasi</button>
+        <button class="breath-btn breath-btn-stop btn-ripple" id="breath-stop">⏹ Berhenti</button>
+      </div>
+      <div class="breath-cycles" id="breath-cycles">Total Siklus: 0</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ QUIZ ============================================================ -->
+<section id="quiz">
+  <div class="section-header reveal">
+    <div class="section-badge">PsyQuiz</div>
+    <h2 class="section-title">Uji <span>Wawasanmu</span></h2>
+    <p class="section-subtitle">Tantang dirimu dengan 10 pertanyaan komprehensif. Apakah kamu seorang master psikologi?</p>
+  </div>
+  <div class="quiz-wrap reveal delay-1">
+    <div id="quiz-content">
+      <div class="quiz-header">
+        <div class="quiz-question-num" id="quiz-q-num">Q.1 / 10</div>
+        <div class="quiz-score-display" id="quiz-score-display">Skor: 0</div>
+      </div>
+      <div class="quiz-progress-bar">
+        <div class="quiz-progress-fill" id="quiz-progress-fill" style="width:0%"></div>
+      </div>
+      <div class="quiz-question-text" id="quiz-q-text"></div>
+      <div class="quiz-options" id="quiz-options"></div>
+      <div class="quiz-explanation" id="quiz-explanation"></div>
+      <div class="quiz-nav">
+        <button class="quiz-btn-next btn-ripple" id="quiz-next" disabled>Lanjut →</button>
+      </div>
+    </div>
+    <div class="quiz-result" id="quiz-result">
+      <div class="quiz-score-ring" id="quiz-score-ring">
+        <div class="quiz-score-num" id="quiz-final-score">0</div>
+        <div class="quiz-score-label">Skor Akhir</div>
+      </div>
+      <div class="quiz-result-msg" id="quiz-result-msg"></div>
+      <div class="quiz-result-sub" id="quiz-result-sub"></div>
+      <button class="quiz-restart btn-ripple" id="quiz-restart">🔄 Coba Sekali Lagi</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ SELF-CARE ============================================================ -->
+<section id="selfcare">
+  <div class="section-header reveal">
+    <div class="section-badge">Ritual Harian</div>
+    <h2 class="section-title">Checklist <span>Self-Care</span></h2>
+    <p class="section-subtitle">Perubahan besar dimulai dari kebiasaan kecil. Bangun momentum positifmu mulai hari ini.</p>
+  </div>
+  <div class="selfcare-layout reveal delay-1">
+    <div class="selfcare-column">
+      <div class="selfcare-column-title">Energi Pagi</div>
+      <div class="selfcare-list" id="selfcare-morning"></div>
+    </div>
+    <div class="selfcare-column">
+      <div class="selfcare-column-title">Ketenangan Malam</div>
+      <div class="selfcare-list" id="selfcare-evening"></div>
+    </div>
+    <div class="selfcare-progress-card">
+      <div class="selfcare-progress-info">
+        <div class="selfcare-progress-title">Indeks Kesejahteraanmu</div>
+        <div class="selfcare-progress-sub" id="selfcare-progress-text">Mulai centang aktivitasmu untuk melihat progres.</div>
+      </div>
+      <div class="selfcare-progress-ring-wrap">
+        <svg class="selfcare-progress-ring" viewBox="0 0 100 100">
+          <circle class="selfcare-progress-circle" cx="50" cy="50" r="40"/>
+          <circle class="selfcare-progress-arc" id="selfcare-arc" cx="50" cy="50" r="40"/>
+        </svg>
+        <div class="selfcare-progress-num">
+          <div class="selfcare-pct" id="selfcare-pct">0%</div>
+          <div class="selfcare-pct-label">Tercapai</div>
+        </div>
+      </div>
+      <button class="selfcare-reset btn-ripple" id="selfcare-reset">🔄 Mulai Ulang</button>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================================ FOOTER ============================================================ -->
+<footer>
+  <div class="footer-grid">
+    <div>
+      <div class="footer-logo">Psyrofories</div>
+      <p class="footer-desc">Dedikasi untuk menyebarkan literasi kesehatan mental dengan desain yang indah dan interaktif untuk masyarakat modern.</p>
+      <div class="footer-socials">
+        <a href="#" class="footer-social">🐦</a>
+        <a href="#" class="footer-social">📸</a>
+        <a href="#" class="footer-social">💼</a>
+        <a href="#" class="footer-social">▶️</a>
+      </div>
+    </div>
+    <div>
+      <div class="footer-col-title">Eksplorasi</div>
+      <ul class="footer-links">
+        <li><a href="#education">Pusat Edukasi</a></li>
+        <li><a href="#myth-fact">Cek Fakta</a></li>
+        <li><a href="#figures">Hall of Fame</a></li>
+        <li><a href="#disorders">Ensiklopedia</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Perangkat</div>
+      <ul class="footer-links">
+        <li><a href="#mood-tracker">Mood Analytics</a></li>
+        <li><a href="#journaling">Private Journal</a></li>
+        <li><a href="#mindfulness">Zen Breathing</a></li>
+        <li><a href="#selfcare">Habit Builder</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title">Penting</div>
+      <div style="padding:20px;background:rgba(255,255,255,.05);border-radius:16px; border:1px solid rgba(255,255,255,0.1);">
+        <div style="font-size:.9rem;color:var(--blue-200);font-weight:800;margin-bottom:10px;text-transform:uppercase;letter-spacing:1px;display:flex;align-items:center;gap:8px;">Disclaimer Medis</div>
+        <div style="font-size:.85rem;color:rgba(255,255,255,.6);line-height:1.7;">Semua konten di situs ini murni edukatif dan tidak dapat menggantikan diagnosis, nasihat, atau penanganan dari profesional kesehatan mental berlisensi.</div>
+      </div>
+    </div>
+  </div>
+  <hr class="footer-divider"/>
+  <div class="footer-bottom">
+    <div class="footer-copy">© 2026 Psyrofories by Creative Minds. All rights reserved.</div>
+    <div class="footer-note">Crafted with 💙 for better mental health</div>
+  </div>
+</footer>
+
+<!-- back to top -->
+<button id="back-to-top" aria-label="Back to top">↑</button>
+
+<!-- toast container -->
+<div id="toast-container"></div>
+
+<!-- ============================================================ JAVASCRIPT ============================================================ -->
+<script>
+/* ============================================================
+   DATA SETS
+============================================================ */
+const QUOTES = [
+  { text: "Mengetahui diri sendiri adalah awal dari semua kebijaksanaan.", author: "Aristoteles" },
+  { text: "Penemuan terbesar generasi saya adalah bahwa manusia dapat mengubah hidupnya dengan mengubah sikap pikirannya.", author: "William James" },
+  { text: "Kamu tidak harus mengendalikan pikiranmu; kamu hanya harus berhenti membiarkan mereka mengendalikanmu.", author: "Dan Millman" },
+  { text: "Kesehatan mental bukanlah tujuan akhir, melainkan sebuah proses. Ini tentang bagaimana kamu mengemudi, bukan kemana kamu pergi.", author: "Noam Shpancer" },
+  { text: "Self-care adalah bagaimana kamu mengambil kembali kekuatanmu.", author: "Lalah Delia" },
+  { text: "Hampir semuanya akan bekerja kembali jika kamu mencabut colokannya selama beberapa menit, termasuk dirimu.", author: "Anne Lamott" },
+  { text: "Paradoks yang aneh adalah bahwa ketika saya menerima diri saya apa adanya, barulah saya bisa berubah.", author: "Carl Rogers" },
+  { text: "Tidak apa-apa untuk tidak baik-baik saja. Yang tidak apa-apa adalah menetap di keadaan itu.", author: "Anonim" },
+  { text: "Kamu sendiri, sama seperti siapapun di seluruh alam semesta, pantas mendapatkan cinta dan kasih sayangmu sendiri.", author: "Buddha" },
+  { text: "Pertumbuhan itu menyakitkan. Perubahan itu menyakitkan. Tapi tidak ada yang lebih menyakitkan daripada terjebak di tempat di mana kamu tidak seharusnya berada.", author: "Mandy Hale" },
+];
+
+const MYTH_FACTS = [
+  { myth: "Orang dengan gangguan mental itu berbahaya dan harus dijauhi.", fact: "Penelitian justru menunjukkan orang dengan masalah mental TIDAK lebih berbahaya. Mereka lebih sering menjadi korban kekerasan dibanding pelaku." },
+  { myth: "Gangguan mental murni karena kurang iman atau karakter yang lemah.", fact: "Ini adalah kondisi medis kompleks. Kombinasi faktor genetik, kimia otak, trauma, dan stres lingkungan, bukan sekadar kelemahan moral." },
+  { myth: "Terapi ke psikolog hanya untuk orang 'gila' atau saat krisis hebat.", fact: "Terapi adalah ruang aman untuk bertumbuh. Seperti pergi ke gym untuk otot, terapi adalah 'gym' untuk melatih ketahanan pikiranmu." },
+  { myth: "Anak-anak tidak mungkin mengalami depresi, hidup mereka tanpa beban.", fact: "Gangguan klinis dapat muncul di segala usia. Faktanya, 50% kondisi kesehatan mental dimulai sebelum usia 14 tahun." },
+  { myth: "Membahas bunuh diri akan memicu seseorang melakukannya.", fact: "Sangat salah! Bertanya secara langsung dan penuh empati justru membuka ruang aman dan terbukti mencegah tindakan tersebut." },
+  { myth: "Sekali didiagnosis gangguan mental, hidup produktif sudah berakhir.", fact: "Dengan intervensi, terapi, dan dukungan yang tepat, mayoritas penyintas dapat memimpin hidup yang sukses, produktif, dan memuaskan." },
+];
+
+const FIGURES = [
+  { photo: "images/freud.png", name: "Sigmund Freud", era: "1856–1939 | Austria", theory: "Psikoanalisis", bio: "Bapak psikoanalisis yang kontroversial. Mengubah cara dunia memandang alam bawah sadar, mimpi, dan trauma masa kecil.", contribution: "Mengenalkan Id, Ego, Superego; mekanisme pertahanan diri; dan menjadikan 'terapi bicara' (talk therapy) sebagai standar medis.", quote: "\"Pikiran itu seperti gunung es, ia mengapung dengan hanya sepertujuh dari massanya yang berada di atas air.\"" },
+  { photo: "images/jung.png", name: "Carl Jung", era: "1875–1961 | Swiss", theory: "Psikologi Analitis", bio: "Mantan murid Freud yang memisahkan diri. Ia menggabungkan psikologi mendalam dengan mitologi, agama, dan filsafat timur.", contribution: "Pencetus konsep Introvert/Ekstrovert, Ketidaksadaran Kolektif, Arketipe (Shadow, Persona), dan Sinkronisitas. Teori MBTI lahir dari pemikirannya.", quote: "\"Sampai kamu menyadari ketidaksadaranmu, itu akan mengarahkan hidupmu dan kamu akan menyebutnya takdir.\"" },
+  { photo: "images/maslow.png", name: "Abraham Maslow", era: "1908–1970 | Amerika", theory: "Psikologi Humanistik", bio: "Ia menolak fokus pada penyakit mental, dan memilih mempelajari orang-orang paling sehat dan sukses untuk memahami potensi penuh manusia.", contribution: "Pencipta 'Hierarki Kebutuhan' yang ikonik. Ia meletakkan dasar bagi psikologi positif dan manajemen modern berpusat pada manusia.", quote: "\"Seseorang bisa memilih untuk melangkah mundur menuju keamanan atau maju menuju pertumbuhan.\"" },
+  { photo: "images/piaget.png", name: "Jean Piaget", era: "1896–1980 | Swiss", theory: "Perkembangan Kognitif", bio: "Seorang ahli biologi yang terpesona oleh kesalahan sistematis anak-anak saat tes IQ, menyadari bahwa anak-anak berpikir dengan cara yang secara fundamental berbeda dari orang dewasa.", contribution: "Mengidentifikasi 4 tahap emas perkembangan kognitif anak. Ia mengubah wajah pendidikan modern yang beralih dari hapalan ke penemuan aktif.", quote: "\"Tujuan pendidikan bukanlah meningkatkan jumlah pengetahuan, tapi menciptakan kemungkinan bagi anak untuk menemukan.\"" },
+  { photo: "images/pavlov.png", name: "Ivan Pavlov", era: "1849–1936 | Rusia", theory: "Classical Conditioning", bio: "Ia memenangkan Nobel Fisiologi atas riset pencernaannya. Secara tidak sengaja, anjing-anjing labnya membawanya pada penemuan psikologis terbesar abad ke-20.", contribution: "Membuktikan bahwa respons tubuh bisa dikondisikan (diasosiasikan) melalui stimulus. Konsep dasarnya dipakai dalam terapi fobia dan kecemasan hingga kini.", quote: "\"Jangan menjadi arsiparis fakta, jadilah penjelajah misterinya.\"" },
+  { photo: "images/skinner.png", name: "B.F. Skinner", era: "1904–1990 | Amerika", theory: "Behaviorisme Radikal", bio: "Ilmuwan paling berpengaruh di abad 20. Ia percaya 'kehendak bebas' adalah ilusi dan semua perilaku manusia dibentuk oleh lingkungannya.", contribution: "Pencetus Operant Conditioning (Reward & Punishment). Aplikasinya digunakan luas dari pendidikan sekolah, desain game, hingga algoritma media sosial saat ini.", quote: "\"Konsekuensi dari suatu tindakan menentukan probabilitas tindakan tersebut diulangi.\"" },
+  { photo: "images/wundt.png", name: "Wilhelm Wundt", era: "1832–1920 | Jerman", theory: "Psikologi Eksperimental", bio: "Sering disebut 'Bapak Psikologi Modern'. Ia mendirikan laboratorium psikologi pertama di dunia di Leipzig pada 1879, menandai kelahiran psikologi sebagai ilmu mandiri.", contribution: "Mendirikan laboratorium psikologi eksperimental pertama. Mengembangkan metode introspeksi ilmiah dan memisahkan psikologi dari filsafat.", quote: "\"Tugas psikologi adalah mempelajari fenomena kesadaran langsung.\"" },
+  { photo: "images/bandura.png", name: "Albert Bandura", era: "1925–2021 | Kanada/Amerika", theory: "Teori Belajar Sosial", bio: "Psikolog paling dikutip di dunia. Eksperimen Bobo Doll-nya membuktikan bahwa kekerasan bisa 'ditularkan' melalui pengamatan dan peniruan tanpa hadiah atau hukuman langsung.", contribution: "Menjembatani behaviorisme dan kognitivisme. Mencetuskan konsep Self-Efficacy — keyakinan seseorang akan kemampuannya — sebagai prediktor utama keberhasilan.", quote: "\"Orang dengan Self-Efficacy tinggi memandang tugas sulit sebagai tantangan yang harus dikuasai, bukan ancaman yang harus dihindari.\"" },
+  { photo: "images/erikson.png", name: "Erik Erikson", era: "1902–1994 | Jerman/Amerika", theory: "Perkembangan Psikososial", bio: "Murid Anna Freud yang melampaui gurunya. Ia melihat perkembangan manusia bukan hanya di masa kecil, tapi sebagai perjalanan seumur hidup dalam 8 tahap yang berbeda.", contribution: "Menciptakan teori 8 Tahap Perkembangan Psikososial (dari bayi hingga lansia). Mempopulerkan istilah 'Krisis Identitas' sebagai fase penting masa remaja.", quote: "\"Di sini terdapat harapan — anak yang tumbuh dengan baik akan menularkan kebaikan ke generasi berikutnya.\"" },
+  { photo: "images/adler.png", name: "Alfred Adler", era: "1870–1937 | Austria", theory: "Psikologi Individual", bio: "Kolega Freud yang berpisah karena tak setuju alam bawah sadar seksual adalah segalanya. Adler meyakini rasa rendah diri (inferiority) adalah pendorong utama perilaku manusia.", contribution: "Mencetuskan konsep 'Inferiority Complex' dan 'Superiority Complex'. Pelopornya terapi keluarga dan psikologi komunitas. Pemikiran utamanya memengaruhi CBT.", quote: "\"Tidak ada pengalaman yang menjadi sebab kesuksesan atau kegagalan kita. Kitalah yang menentukannya.\"" },
+  { photo: "images/rogers.png", name: "Carl Rogers", era: "1902–1987 | Amerika", theory: "Psikologi Humanistik / Person-Centered", bio: "Psikolog yang paling hangat dan manusiawi. Ia percaya setiap manusia memiliki kemampuan bawaan untuk tumbuh jika diberi lingkungan yang tepat.", contribution: "Mendirikan Client-Centered Therapy (sekarang Person-Centered Therapy). Mengidentifikasi 3 kondisi inti terapi efektif: Empati, Ketulusan, dan Penerimaan Tanpa Syarat.", quote: "\"Rasa ingin tahu yang luar biasa tentang hidup dan pengalaman manusia itulah yang mengisi diriku.\"" },
+  { photo: "images/vygotsky.png", name: "Lev Vygotsky", era: "1896–1934 | Rusia", theory: "Konstruktivisme Sosial", bio: "Jenius yang meninggal terlalu muda di usia 37 karena TBC. Meski hidupnya singkat, pemikirannya tentang peran sosial dalam belajar masih sangat relevan hingga kini.", contribution: "Mencetuskan 'Zone of Proximal Development' (ZPD) — ruang belajar optimal di antara yang sudah dikuasai dan yang belum. Dasar dari konsep 'scaffolding' dalam pendidikan.", quote: "\"Melalui orang lain, kita menjadi diri kita sendiri.\"" },
+  { photo: "images/horney.png", name: "Karen Horney", era: "1885–1952 | Jerman/Amerika", theory: "Neopsikoanalisis Feminis", bio: "Psikoanalis perempuan pertama yang berani menentang Freud secara terbuka. Ia berpendapat 'penis envy' adalah konstruk budaya, bukan fakta biologis.", contribution: "Menggeser fokus psikoanalisis dari seksualitas ke kecemasan dasar dan relasi sosial. Mencetuskan 10 'Neurotic Needs' dan tiga strategi koping: mendekati, menentang, menghindari.", quote: "\"Keberanian sejati adalah melakukan sesuatu yang menakutkan.\"" },
+  { photo: "images/beck.png", name: "Aaron Beck", era: "1921–2021 | Amerika", theory: "Terapi Kognitif (CBT)", bio: "Seorang psikiater yang frustrasi dengan psikoanalisis karena tidak ada buktinya. Ia kemudian mengembangkan CBT yang terbukti klinis dan merevolusi psikiatri modern.", contribution: "Bapak Cognitive Behavioral Therapy (CBT). Mengidentifikasi 'Distorsi Kognitif' (pikiran negatif otomatis) sebagai akar masalah. CBT kini menjadi terapi paling teruji di dunia.", quote: "\"Bukan situasi yang menyebabkan emosi kita, melainkan interpretasi kita terhadap situasi tersebut.\"" },
+  { photo: "images/seligman.png", name: "Martin Seligman", era: "1942– | Amerika", theory: "Psikologi Positif", bio: "Presiden APA yang berpikir psikologi terlalu lama hanya berfokus pada penyakit. Ia menginisiasi gerakan Psikologi Positif untuk mempelajari apa yang membuat hidup layak dijalani.", contribution: "Bapak Psikologi Positif dan pendiri Positive Education. Mengembangkan model PERMA (Positive Emotion, Engagement, Relationships, Meaning, Achievement) untuk kesejahteraan.", quote: "\"Optimisme adalah investasi untuk masa depan diri sendiri.\"" },
+  { photo: "images/james.png", name: "William James", era: "1842–1910 | Amerika", theory: "Fungsionalisme / Pragmatisme", bio: "Filosof dan psikolog Amerika yang dianggap sebagai 'Bapak Psikologi Amerika'. Saudaranya, Henry James, adalah novelis terkenal, dan ia sendiri berjuang dengan depresi parah.", contribution: "Menulis 'The Principles of Psychology' (1890), buku teks psikologi pertama yang berpengaruh. Mencetuskan Teori Emosi James-Lange: emosi adalah kesadaran kita akan perubahan tubuh.", quote: "\"Senjata terbesar menghadapi stres adalah kemampuan memilih satu pikiran di atas pikiran lainnya.\"" },
+  { photo: "images/frankl.png", name: "Viktor Frankl", era: "1905–1997 | Austria", theory: "Logoterapi / Eksistensialisme", bio: "Psikiater yang selamat dari kamp konsentrasi Nazi (Auschwitz). Pengalaman traumatisnya justru memvalidasi teorinya: selama ada makna, manusia bisa menanggung penderitaan apapun.", contribution: "Mendirikan Logoterapi (terapi makna). Menulis 'Man's Search for Meaning' — salah satu 10 buku paling berpengaruh di Amerika. Membuktikan bahwa kebebasan batin tidak bisa dirampas.", quote: "\"Di antara stimulus dan respons, ada ruang. Di ruang itulah kebebasan dan pertumbuhan kita berada.\"" },
+  { photo: "images/kahneman.png", name: "Daniel Kahneman", era: "1934–2024 | Israel/Amerika", theory: "Ekonomi Perilaku / Psikologi Kognitif", bio: "Psikolog pertama yang memenangkan Nobel Ekonomi. Bersama Amos Tversky, ia membuktikan bahwa manusia jauh dari 'rasional' dalam mengambil keputusan.", contribution: "Mengembangkan Teori Prospek dan memperkenalkan dua sistem berpikir: Sistem 1 (cepat, intuitif, emosional) dan Sistem 2 (lambat, analitis, logis) dalam bukunya 'Thinking, Fast and Slow'.", quote: "\"Kita tidak berpikir tentang keadaan kita, kita berpikir tentang perubahan dari keadaan referensi.\"" },
+  { photo: "images/milgram.png", name: "Stanley Milgram", era: "1933–1984 | Amerika", theory: "Psikologi Sosial / Kepatuhan", bio: "Eksperimennya adalah salah satu yang paling gelap dan paling penting dalam sejarah psikologi. Ia ingin memahami bagaimana orang biasa bisa melakukan kekejaman Nazi.", contribution: "Eksperimen Kepatuhan Milgram membuktikan 65% orang biasa rela memberikan sengatan listrik mematikan atas perintah otoritas. Merevolusi pemahaman kita tentang kejahatan dan kepatuhan.", quote: "\"Sering kali bukan karakter yang buruk, melainkan situasilah yang mendorong orang melakukan hal buruk.\"" },
+  { photo: "images/bowlby.png", name: "Bowlby & Ainsworth", era: "1907–1990 & 1913–1999", theory: "Teori Kelekatan (Attachment)", bio: "John Bowlby membangun fondasi teori kelekatan; Mary Ainsworth mengujinya secara eksperimental dengan 'Strange Situation' untuk mengidentifikasi 3 pola kelekatan utama pada bayi.", contribution: "Membuktikan bahwa ikatan aman (secure attachment) di masa bayi adalah pondasi kesehatan mental seumur hidup. Dasar dari ilmu pengasuhan anak modern.", quote: "\"Kelekatan adalah bagian dari sifat manusia, dari buaian hingga liang lahat.\" — Bowlby" },
+  { photo: "images/allport.png", name: "Gordon Allport", era: "1897–1967 | Amerika", theory: "Psikologi Kepribadian (Trait)", bio: "Pelopor psikologi kepribadian modern. Berbeda dari Freud, ia berfokus pada keunikan dan individualitas setiap manusia, bukan mencari pola universal yang tersembunyi.", contribution: "Menemukan lebih dari 4.000 kata sifat kepribadian dalam kamus. Membagi sifat menjadi Kardinal, Sentral, dan Sekunder. Meletakkan fondasi bagi Big Five Personality (OCEAN) modern.", quote: "\"Kepribadian adalah organisasi dinamis dalam diri individu dari sistem psikofisik yang menentukan pikiran dan perilakunya.\"" },
+  { photo: "images/witmer.png", name: "Lightner Witmer", era: "1867–1956 | Amerika", theory: "Psikologi Klinis", bio: "Orang yang menjadikan psikologi bukan sekadar ilmu akademis di laboratorium, melainkan profesi yang membantu langsung manusia yang membutuhkan.", contribution: "Mendirikan klinik psikologi pertama di dunia (1896) di Universitas Pennsylvania. Orang pertama yang menggunakan istilah 'Clinical Psychology'. Pelopor layanan psikologi pendidikan.", quote: "\"Psikologi harus membuktikan nilainya dalam pelayanan langsung kepada manusia yang membutuhkan.\"" },
+];
+
+const DISORDERS = [
+  { id: "anxiety", tab: "Kecemasan", name: "Anxiety Disorder", nameId: "Gangguan Kecemasan General", desc: "Kondisi melumpuhkan di mana sistem alarm otak terus menyala meski tidak ada bahaya nyata. Kekhawatiran intens memakan energi mental setiap hari.", symptoms: ["Overthinking berlebih yang di luar kendali", "Jantung berdebar keras, keringat dingin, napas pendek", "Sensasi 'blank' atau lumpuh otak", "Ketegangan otot leher/bahu kronis", "Insomnia karena pikiran yang berlari cepat"], stats: [{num:"301M", label:"Kasus Global"},{num:"1/3", label:"Terdiagnosis"},{num:"#1", label:"Kasus Terbanyak"},{num:"75%", label:"Sembuh dgn CBT"}], emoji: "😰", helpText: "CBT (Cognitive Behavioral Therapy) terbukti secara klinis untuk 'menyetel ulang' alarm otak yang terlalu sensitif ini." },
+  { id: "depression", tab: "Depresi", name: "Major Depression", nameId: "Depresi Klinis", desc: "Bukan sekadar 'sedih'. Depresi adalah distorsi persepsi di mana otak kehilangan kemampuan merasakan kesenangan (anhedonia) dan menguras energi fisik.", symptoms: ["Kekosongan emosional yang persisten", "Anhedonia: kehilangan total minat pada hobi", "Perubahan drastis selera makan & berat badan", "Fatigue: kelelahan ekstrim sekadar untuk bangun", "Pikiran gelap tentang ketidakberhargaan atau kematian"], stats: [{num:"280M", label:"Kasus Global"},{num:"#1", label:"Penyebab Disabilitas"},{num:"50%", label:"Tak Diobati"},{num:"80%", label:"Respons Terapi"}], emoji: "😔", helpText: "Kombinasi Psikoterapi, perubahan gaya hidup (olahraga teratur), dan farmakoterapi bila perlu sangat efektif." },
+  { id: "ocd", tab: "OCD", name: "Obsessive-Compulsive", nameId: "Gangguan Obsesif Kompulsif", desc: "Siklus kejam antara pikiran menakutkan yang intrusif (obsesi) dan keharusan mutlak melakukan suatu ritual (kompulsi) untuk mencegah 'bencana' fiktif.", symptoms: ["Pikiran intrusif tentang kuman, kekerasan, atau kesalahan", "Ritual repetitif: mencuci, memeriksa kunci, menghitung", "Kepanikan hebat jika ritual digagalkan", "Memakan waktu berjam-jam tiap harinya", "Sadar itu tidak rasional tapi tak bisa berhenti"], stats: [{num:"2-3%", label:"Populasi Global"},{num:"10thn", label:"Delay Diagnosis"},{num:"Top 10", label:"Disabilitas WHO"},{num:"70%", label:"Sukses dgn ERP"}], emoji: "🔁", helpText: "ERP (Exposure and Response Prevention) adalah Gold Standard. Pasien berlatih menghadapi rasa takut tanpa melakukan ritual kompulsinya." },
+  { id: "adhd", tab: "ADHD", name: "ADHD", nameId: "Defisit Perhatian/Hiperaktivitas", desc: "Bukan karena malas. Ini adalah kondisi neurodevelopmental struktural otak terkait defisit dopamin yang mengacaukan fungsi eksekutif (perhatian, memori, impuls).", symptoms: ["Buta Waktu (Time blindness) dan prokrastinasi akut", "Hyperfocus pada minat, tapi 0 fokus pada tugas bosan", "Impulsivitas ekstrim dalam bicara atau belanja", "Gelisah fisik atau mental (pikiran yang riuh)", "Kesulitan luar biasa mengorganisir tugas harian"], stats: [{num:"8%", label:"Anak-anak"},{num:"3%", label:"Dewasa"},{num:"3:1", label:"Pria:Wanita"},{num:"Top 1", label:"Genetik (Sangat)"}], emoji: "⚡", helpText: "Manajemen multidisiplin: Medikasi stimulan (bekerja sangat baik), terapi perilaku, dan pembangunan sistem/tools struktur hidup." },
+  { id: "insomnia", tab: "Insomnia", name: "Insomnia Disorder", nameId: "Gangguan Tidur Insomnia", desc: "Ketidakmampuan kronis untuk memulai atau mempertahankan tidur yang cukup meski ada kesempatan. Bukan sekadar susah tidur biasa, ini mengganggu fungsi harian secara signifikan.", symptoms: ["Sulit tertidur meski sudah sangat lelah", "Sering terbangun di malam hari dan susah tidur kembali", "Bangun terlalu pagi dan tidak bisa tidur lagi", "Kelelahan, konsentrasi buruk di siang hari", "Iritabilitas, kecemasan, atau depresi akibat kurang tidur"], stats: [{num:"30%", label:"Orang Dewasa"},{num:"10%", label:"Insomnia Kronis"},{num:"3x", label:"Risiko Depresi"},{num:"80%", label:"Membaik dgn CBT-I"}], emoji: "😴", helpText: "CBT-I (CBT untuk Insomnia) lebih efektif dari obat tidur dalam jangka panjang. Teknik relaksasi dan sleep hygiene sangat membantu." },
+  { id: "ptsd", tab: "PTSD", name: "Post-Traumatic Stress Disorder", nameId: "Gangguan Stres Pasca-Trauma", desc: "Respons otak yang terjebak dalam mode 'siaga darurat' jauh setelah kejadian traumatik berakhir. Trauma bisa muncul dari perang, kekerasan, kecelakaan, atau bencana.", symptoms: ["Flashback dan mimpi buruk tentang trauma yang intens", "Menghindari segala hal yang mengingatkan pada trauma", "Hypervigilance (selalu waspada berlebihan)", "Mati rasa emosional atau merasa terasing", "Reaksi terkejut yang berlebihan (startle response)"], stats: [{num:"70%", label:"Alami Trauma"},{num:"20%", label:"Berkembang PTSD"},{num:"3.9%", label:"Prevalensi Global"},{num:"60-80%", label:"Respons Terapi"}], emoji: "🌪️", helpText: "EMDR (Eye Movement Desensitization) dan Prolonged Exposure Therapy terbukti sangat efektif. Dukungan sosial adalah kunci pemulihan." },
+  { id: "npd", tab: "Narsistik", name: "Narcissistic Personality Disorder", nameId: "Gangguan Kepribadian Narsistik", desc: "Pola pervasif rasa keagungan diri, kebutuhan ekstrim akan kekaguman, dan kurangnya empati. Di balik fasad percaya diri tersembunyi rasa rapuh yang sangat dalam.", symptoms: ["Rasa grandiositas dan kepentingan diri yang berlebihan", "Sibuk dengan fantasi kesuksesan, kekuasaan, atau kecantikan tak terbatas", "Percaya dirinya spesial dan hanya bisa dipahami orang istimewa", "Mengeksploitasi orang lain demi tujuan pribadi", "Iri pada orang lain atau percaya orang lain iri padanya"], stats: [{num:"0.5-5%", label:"Populasi"},{num:"75%", label:"Pria"},{num:"Sulit", label:"Diobati"},{num:"60%", label:"Ada Komorbid"}], emoji: "🪞", helpText: "Terapi sangat menantang karena penderita jarang mau mencari bantuan. Psikoterapi jangka panjang (DBT/Schema Therapy) paling efektif." },
+  { id: "bpd", tab: "BPD", name: "Borderline Personality Disorder", nameId: "Gangguan Kepribadian Ambang", desc: "Kondisi intens ditandai oleh ketidakstabilan emosi ekstrim, identitas yang rapuh, dan ketakutan mendalam akan penolakan dan ditinggalkan.", symptoms: ["Ketakutan ekstrim akan penolakan dan ditinggalkan", "Hubungan interpersonal yang intens dan tidak stabil (idealisasi vs. devaluasi)", "Identitas diri yang tidak stabil dan berubah-ubah", "Impulsivitas berbahaya (belanja, seks, penyalahgunaan zat)", "Perilaku menyakiti diri sendiri atau ancaman bunuh diri"], stats: [{num:"1.6%", label:"Populasi"},{num:"75%", label:"Perempuan"},{num:"70%", label:"Riwayat Trauma"},{num:"86%", label:"Respons DBT"}], emoji: "🌊", helpText: "DBT (Dialectical Behavior Therapy) dikembangkan khusus untuk BPD oleh Marsha Linehan dan memiliki tingkat efektivitas sangat tinggi." },
+  { id: "schizophrenia", tab: "Skizofrenia", name: "Schizophrenia", nameId: "Skizofrenia", desc: "Gangguan psikotik berat yang memutus koneksi seseorang dengan realitas. Melibatkan halusinasi, delusi, dan pikiran yang sangat kacau — bukan kepribadian ganda.", symptoms: ["Halusinasi (umumnya mendengar suara yang orang lain tidak dengar)", "Delusi (keyakinan palsu yang kuat, misal: sedang dimata-matai)", "Pikiran tidak terorganisir dan pembicaraan kacau", "Gejala Negatif: afek datar, menarik diri sosial, anhedonia", "Penurunan fungsi dalam pekerjaan, hubungan, atau perawatan diri"], stats: [{num:"24M", label:"Kasus Global"},{num:"0.32%", label:"Prevalensi"},{num:"Sama", label:"Semua Gender"},{num:"50%", label:"Tak Diobati"}], emoji: "🧩", helpText: "Antipsikotik sangat efektif mengurangi gejala positif. Dikombinasikan dengan rehabilitasi psikososial untuk pemulihan optimal." },
+  { id: "eating", tab: "Eating Disorder", name: "Eating Disorders", nameId: "Gangguan Makan", desc: "Gangguan psikiatri serius ditandai perilaku makan yang tidak normal dan kekhawatiran berlebihan tentang berat badan. Memiliki tingkat kematian tertinggi di antara semua gangguan mental.", symptoms: ["Pembatasan ekstrim asupan makanan (Anorexia)", "Makan berlebihan diikuti kompensasi seperti muntah paksa (Bulimia)", "Episode makan kompulsif tanpa kompensasi (Binge Eating)", "Distorsi citra tubuh yang parah", "Ritual makan yang kaku dan obsesif"], stats: [{num:"9%", label:"Populasi Global"},{num:"Tertinggi", label:"Angka Kematian"},{num:"1 per jam", label:"Meninggal di AS"},{num:"70%", label:"Komorbid Ansietas"}], emoji: "🍃", helpText: "Tim multidisiplin: psikiater, ahli gizi, dan psikoterapis dibutuhkan. CBT-E (Enhanced) efektif untuk Bulimia dan Binge Eating." },
+  { id: "bipolar", tab: "Bipolar", name: "Bipolar Disorder", nameId: "Gangguan Bipolar", desc: "Gangguan mood yang menyebabkan pergeseran ekstrim antara episode mania (energi meledak) dan depresi berat. Pergeseran ini dapat berlangsung berhari-hari hingga berbulan-bulan.", symptoms: ["Fase Mania: energi meledak, euforia, tidak butuh tidur", "Fase Depresi: sedih mendalam, kelelahan ekstrim, putus asa", "Pikiran berpacu (racing thoughts) dan berbicara sangat cepat", "Keputusan impulsif dan berisiko saat mania (belanja, seks)", "Sulit mempertahankan pekerjaan atau hubungan stabil"], stats: [{num:"45M", label:"Kasus Global"},{num:"2.8%", label:"Prevalensi"},{num:"60%", label:"Salah Diagnosis"},{num:"40%", label:"Riwayat Penyalahgunaan Zat"}], emoji: "⚡", helpText: "Stabilizer mood (Lithium) adalah gold standard. Psikoedukasi untuk pasien dan keluarga sangat penting untuk mencegah relaps." },
+  { id: "phobia", tab: "Fobia", name: "Specific Phobia", nameId: "Fobia Spesifik", desc: "Rasa takut intens, irasional, dan persisten terhadap objek atau situasi tertentu yang memicu respons kecemasan segera dan tidak proporsional terhadap bahaya nyata.", symptoms: ["Rasa takut intens yang segera saat berhadapan dengan pemicu", "Serangan panik (jantung berdebar, sesak napas, gemetar)", "Penghindaran aktif terhadap situasi atau objek yang ditakuti", "Menyadari ketakutan tidak rasional tapi tidak bisa menghentikannya", "Gangguan signifikan pada pekerjaan atau kehidupan sosial"], stats: [{num:"12.5%", label:"Populasi Seumur Hidup"},{num:"2x", label:"Lebih Umum pada Wanita"},{num:"200+", label:"Jenis Fobia"},{num:"90%", label:"Sembuh dgn Exposure"}], emoji: "😨", helpText: "Exposure Therapy (terpapar stimulus secara bertahap) adalah terapi paling efektif — tingkat kesembuhan mencapai 90% dalam waktu singkat." },
+  { id: "elimination", tab: "Gangg. Eliminasi", name: "Elimination Disorders", nameId: "Gangguan Eliminasi", desc: "Gangguan yang ditandai pengeluaran feses atau urin secara tidak tepat (di tempat yang tidak sesuai secara sosial). Meliputi Enuresis (mengompol) dan Encopresis (buang air besar tidak pada tempatnya).", symptoms: ["Mengompol berulang (Enuresis) pada anak usia ≥5 tahun", "BAB di celana atau tempat tidak tepat (Encopresis) pada anak ≥4 tahun", "Bisa terjadi saat tidur (nocturnal) atau saat terjaga", "Distres signifikan pada anak atau gangguan fungsi sosial", "Sering berkaitan dengan stres psikologis atau masalah fisik"], stats: [{num:"5-10%", label:"Anak Usia 5 Thn"},{num:"1%", label:"Remaja"},{num:"Lebih Umum", label:"Pada Anak Laki-laki"},{num:"75%", label:"Sembuh dgn Terapi"}], emoji: "💧", helpText: "Pendekatan perilaku (alarm enuresis, jadwal toilet) sangat efektif. Penting mengesampingkan penyebab medis terlebih dahulu." },
+  { id: "gender", tab: "Disforia Gender", name: "Gender Dysphoria", nameId: "Disforia Gender", desc: "Distres signifikan yang dialami seseorang karena ketidaksesuaian antara identitas gender yang dirasakannya dengan jenis kelamin yang ditentukan saat lahir.", symptoms: ["Keinginan kuat untuk menjadi gender lain", "Distres signifikan terkait karakteristik seksual primer/sekunder", "Keinginan kuat agar orang lain memperlakukan diri sebagai gender lain", "Keyakinan kuat memiliki perasaan dan reaksi seperti gender lain", "Gangguan signifikan dalam fungsi sosial dan pekerjaan"], stats: [{num:"0.5-1.3%", label:"Populasi"},{num:"Meningkat", label:"Kesadaran Diagnosis"},{num:"Penting", label:"Dukungan Keluarga"},{num:"Tinggi", label:"Komorbid Ansietas/Depresi"}], emoji: "🌈", helpText: "Terapi afirmatif gender, dukungan keluarga dan sosial, serta akses layanan kesehatan yang inklusif adalah kunci kesejahteraan." },
+  { id: "personality", tab: "Gangg. Kepribadian", name: "Personality Disorders", nameId: "Gangguan Kepribadian (Umum)", desc: "Pola pengalaman batin dan perilaku yang pervasif, tidak fleksibel, dan menyimpang dari ekspektasi budaya. Terbagi dalam 3 klaster: A (eksentrik), B (dramatis), dan C (pencemas).", symptoms: ["Pola pikir dan persepsi diri yang sangat kaku", "Kesulitan signifikan dalam relasi interpersonal", "Regulasi emosi yang buruk dan konsisten", "Impulsivitas atau perilaku yang mengganggu", "Mulai dari masa remaja dan stabil seiring waktu"], stats: [{num:"9-15%", label:"Populasi"},{num:"10 Jenis", label:"DSM-5"},{num:"Sulit", label:"Didiagnosis"},{num:"Mungkin", label:"Dengan Terapi Intensif"}], emoji: "🎭", helpText: "Schema Therapy dan DBT adalah pendekatan paling efektif. Terapi jangka panjang diperlukan karena sifatnya yang pervasif." },
+  { id: "impulse", tab: "Kontrol Impuls", name: "Impulse Control Disorders", nameId: "Gangguan Kontrol Impuls", desc: "Ketidakmampuan menahan dorongan, impuls, atau godaan untuk melakukan tindakan yang merugikan diri sendiri atau orang lain. Meliputi Kleptomania, Piromania, dan Intermittent Explosive Disorder.", symptoms: ["Ketegangan atau gairah meningkat sebelum melakukan tindakan", "Kesenangan, kepuasan, atau kelegaan saat melakukan tindakan", "Rasa bersalah atau penyesalan setelahnya", "Dorongan berulang yang sulit atau tidak bisa ditahan", "Menyebabkan masalah hukum, sosial, atau finansial signifikan"], stats: [{num:"4-6%", label:"Populasi"},{num:"Lebih Umum", label:"Pada Pria"},{num:"Sering", label:"Komorbid Bipolar"},{num:"Bisa", label:"Diobati dgn CBT"}], emoji: "💥", helpText: "CBT untuk mengenali pemicu dan mengembangkan strategi koping. Obat-obatan tertentu bisa membantu mengurangi intensitas dorongan." },
+  { id: "paraphilia", tab: "Parafilia", name: "Paraphilic Disorders", nameId: "Gangguan Parafilia", desc: "Ketertarikan seksual intens dan persisten pada objek, situasi, atau individu yang tidak umum (seperti anak-anak, benda mati, atau penderitaan). Menjadi 'gangguan' jika menyebabkan distres atau membahayakan orang lain.", symptoms: ["Fantasi, dorongan, atau perilaku seksual intens yang berulang", "Berlangsung setidaknya 6 bulan", "Menyebabkan distres klinis signifikan atau gangguan fungsi", "Dapat melibatkan tindakan yang melanggar hukum", "Berbeda dari preferensi seksual normal yang konsensual"], stats: [{num:"Beragam", label:"Prevalensi"},{num:"Lebih Umum", label:"Pada Pria"},{num:"Perlu", label:"Asesmen Profesional"},{num:"Mungkin", label:"Dikelola"}], emoji: "🔒", helpText: "Terapi kognitif-perilaku dan, dalam beberapa kasus, terapi hormonal. Prioritas utama adalah keselamatan individu dan orang lain." },
+  { id: "cognitive", tab: "Gangg. Kognitif", name: "Cognitive & Developmental Disorders", nameId: "Gangguan Kognitif & Perkembangan", desc: "Kelompok kondisi yang memengaruhi kemampuan kognitif, memori, atau perkembangan. Meliputi Demensia, Delirium, Gangguan Belajar, dan Disabilitas Intelektual.", symptoms: ["Penurunan signifikan dalam memori, perhatian, atau bahasa", "Kehilangan kemampuan kognitif yang sebelumnya dimiliki (Demensia)", "Kesulitan belajar membaca (Disleksia) atau berhitung (Diskalkuli)", "Keterlambatan perkembangan signifikan pada anak", "Gangguan orientasi terhadap waktu, tempat, atau orang (Delirium)"], stats: [{num:"55M", label:"Kasus Demensia"},{num:"Setiap 3 Detik", label:"Kasus Baru Demensia"},{num:"15-20%", label:"Gangguan Belajar"},{num:"1%", label:"Disabilitas Intelektual"}], emoji: "🧠", helpText: "Pendekatan multidisiplin: terapi kognitif, dukungan pendidikan khusus, dan perawatan medis disesuaikan dengan jenis gangguannya." },
+  { id: "sexual", tab: "Disfungsi Seksual", name: "Sexual Dysfunction", nameId: "Gangguan Disfungsi Seksual", desc: "Gangguan yang menandai masalah signifikan dalam kemampuan merespons secara seksual atau merasakan kesenangan seksual, termasuk gangguan hasrat, gairah, orgasme, atau nyeri.", symptoms: ["Hasrat seksual yang sangat rendah atau tidak ada (HSDD)", "Kesulitan mencapai atau mempertahankan ereksi/lubrikasi", "Ketidakmampuan mencapai orgasme meski stimulasi cukup", "Nyeri signifikan saat atau setelah aktivitas seksual", "Distres signifikan atau kesulitan interpersonal akibat masalah ini"], stats: [{num:"31%", label:"Pria Terdampak"},{num:"43%", label:"Wanita Terdampak"},{num:"Meningkat", label:"Dgn Usia"},{num:"80%", label:"Responsif terhadap Terapi"}], emoji: "💙", helpText: "Pendekatan biopsikososial: mengecek faktor medis, terapi seks, konseling pasangan, dan mengatasi kecemasan performa." },
+];
+
+
+const MOODS = [
+  { emoji: "🤩", label: "Luar Biasa", activities: ["Gunakan energimu untuk proyek kreatif", "Hubungi dan tularkan semangat ke temanmu", "Rayakan harimu dengan traktiran kecil"] },
+  { emoji: "😊", label: "Nyaman & Baik", activities: ["Jaga ritmemu dengan jalan-jalan santai", "Baca beberapa halaman buku bagus", "Bantu orang lain dengan hal kecil"] },
+  { emoji: "😐", label: "Biasa Saja / Netral", activities: ["Coba latihan Mindfulness Breathing di bawah", "Rapikan meja atau kamarmu (clearing space)", "Dengarkan lofi atau musik instrumental"] },
+  { emoji: "😔", label: "Sendu & Kosong", activities: ["Tulis di Journal: validasi perasaanmu tanpa menghakimi", "Manjakan diri dengan mandi air hangat/coklat panas", "Tonton tayangan ringan yang tidak memicu emosi"] },
+  { emoji: "😤", label: "Tegang & Frustrasi", activities: ["Salurkan via fisik: lari cepat, gym, atau pukul bantal", "Tulis sumber marahmu lalu sobek kertasnya", "Teknik napas 4-7-8 untuk slow down detak jantung"] },
+  { emoji: "😰", label: "Kewalahan & Cemas", activities: ["Grounding 5-4-3-2-1 (sebut 5 hal yg bisa dilihat, dll)", "Batasi akses sosmed dan berita hari ini", "Bicara dengan safe-person kamu sekarang"] },
+  { emoji: "🔋", label: "Terkuras Habis", activities: ["Beri izin dirimu untuk melakukan 0 produktivitas", "Power nap maksimal 25 menit", "Matikan layar gadget 1 jam lebih awal malam ini"] },
+];
+
+const QUIZ_QUESTIONS = [
+  { q: "Siapakah yang mencetuskan 'Hierarki Kebutuhan' berbentuk piramida?", opts: ["Carl Jung", "Sigmund Freud", "Abraham Maslow", "B.F. Skinner"], ans: 2, exp: "Abraham Maslow meyakini manusia termotivasi untuk mencapai aktualisasi diri, setelah kebutuhan dasar (makanan, rasa aman) terpenuhi." },
+  { q: "Dalam eksperimen Pavlov, anjing mengeluarkan air liur saat mendengar bel. Bel di sini disebut sebagai...", opts: ["Unconditioned Stimulus", "Conditioned Stimulus", "Conditioned Response", "Neutral Operator"], ans: 1, exp: "Bel yang awalnya tidak bermakna menjadi 'Conditioned Stimulus' (Stimulus yang Dikondisikan) setelah diasosiasikan berulang kali dengan makanan." },
+  { q: "Terapi yang berfokus mengubah pola pikir negatif (distorsi kognitif) untuk mengubah emosi disebut...", opts: ["Psikoanalisis", "Terapi Gestalt", "CBT", "EMDR"], ans: 2, exp: "CBT (Cognitive Behavioral Therapy) adalah salah satu terapi paling teruji klinis untuk depresi dan kecemasan dengan restrukturisasi pola pikir." },
+  { q: "Konsep Arketipe (seperti Pahlawan, Orang Tua Bijak) dalam ketidaksadaran manusia diperkenalkan oleh...", opts: ["Sigmund Freud", "Carl Jung", "Jean Piaget", "Erik Erikson"], ans: 1, exp: "Carl Jung percaya ada 'Ketidaksadaran Kolektif' yang berisi memori genetik umat manusia berupa simbol-simbol universal atau Arketipe." },
+  { q: "Apa itu 'Neuroplastisitas' dalam psikologi modern?", opts: ["Kerusakan otak permanen", "Kecepatan neuron menembak", "Kemampuan otak berubah dan membentuk jalur baru", "Hormon pembawa kebahagiaan"], ans: 2, exp: "Neuroplastisitas membuktikan otak kita fleksibel. Belajar skill baru atau terapi dapat secara fisik mengubah struktur otak." },
+  { q: "Gejala khas di mana penderita kehilangan minat/kesenangan total pada hal yang disukainya disebut...", opts: ["Amnesia", "Anhedonia", "Apatis", "Afasia"], ans: 1, exp: "Anhedonia adalah gejala inti dari Depresi Klinis, yaitu ketidakmampuan merasakan emosi positif atau kesenangan." },
+  { q: "Teori yang menyatakan anak belajar dengan mengamati dan meniru model dewasa (Eksperimen Bobo Doll) dikembangkan oleh...", opts: ["Albert Bandura", "B.F. Skinner", "Ivan Pavlov", "John Watson"], ans: 0, exp: "Albert Bandura dengan Teori Belajar Sosial-nya membuktikan bahwa observasi dan modeling krusial dalam perkembangan perilaku anak." },
+  { q: "Hormon yang sering dijuluki 'Hormon Cinta' yang dilepaskan saat berpelukan adalah...", opts: ["Dopamin", "Serotonin", "Kortisol", "Oksitosin"], ans: 3, exp: "Oksitosin memfasilitasi ikatan sosial, empati, dan kepercayaan. Itulah mengapa dukungan fisik sosial terasa menenangkan." },
+  { q: "Pada OCD, perilaku mencuci tangan berulang kali untuk meredakan kecemasan diklasifikasikan sebagai...", opts: ["Obsesi", "Kompulsi", "Delusi", "Tics"], ans: 1, exp: "Obsesi adalah pikiran menakutkannya (kuman), sementara Kompulsi adalah aksi fisiknya (mencuci) untuk sementara meredakan takut." },
+  { q: "Menurut Seligman (Bapak Psikologi Positif), model kesejahteraan dirumuskan dalam singkatan...", opts: ["PEACE", "SMILE", "PERMA", "GROW"], ans: 2, exp: "PERMA = Positive Emotion, Engagement, Relationships, Meaning, dan Achievement. Lima pilar untuk hidup yang bermakna." },
+];
+
+const SELFCARE_ITEMS = {
+  morning: [
+    { id: "sc1", emoji: "💧", text: "Hidrasi Instan (Minum 1 Gelas Air)" },
+    { id: "sc2", emoji: "☀️", text: "Terpapar Cahaya Matahari 5 Menit" },
+    { id: "sc3", emoji: "🧘", text: "Peregangan Singkat (Neck & Shoulders)" },
+    { id: "sc4", emoji: "🥗", text: "Sarapan Mengandung Protein" },
+    { id: "sc5", emoji: "🎯", text: "Tentukan 1 Tujuan Utama Hari Ini" },
+  ],
+  evening: [
+    { id: "sc6", emoji: "📵", text: "No-Screen Time 1 Jam Sebelum Tidur" },
+    { id: "sc7", emoji: "📝", text: "Brain Dump (Tulis Pemicu Stres Hari Ini)" },
+    { id: "sc8", emoji: "🛁", text: "Mandi Air Hangat (Relaxasi Otot)" },
+    { id: "sc9", emoji: "🙏", text: "Catat 3 Hal yang Disyukuri Hari Ini" },
+    { id: "sc10", emoji: "🌙", text: "Persiapan Tidur (Suasana Gelap & Sejuk)" },
+  ]
+};
+
+/* ============================================================
+   UTILITIES
+============================================================ */
+const $ = (sel, el=document) => el.querySelector(sel);
+const $$ = (sel, el=document) => [...el.querySelectorAll(sel)];
+const lsGet = (key, def=null) => { try{ const v=localStorage.getItem(key); return v!==null?JSON.parse(v):def; }catch{return def;} };
+const lsSet = (key, val) => { try{ localStorage.setItem(key, JSON.stringify(val)); }catch{} };
+
+function showToast(msg, icon='✅', dur=3500) {
+  const c = $('#toast-container');
+  const t = document.createElement('div');
+  t.className = 'toast';
+  t.innerHTML = `<span class="toast-icon">${icon}</span><span>${msg}</span>`;
+  c.appendChild(t);
+  setTimeout(()=>{ t.classList.add('out'); setTimeout(()=>t.remove(),400); }, dur);
+}
+
+function formatDate(d) {
+  const dt = new Date(d);
+  return dt.toLocaleDateString('id-ID', {weekday:'long',year:'numeric',month:'short',day:'numeric',hour:'2-digit',minute:'2-digit'});
+}
+
+/* ============================================================
+   CORE INIT & LISTENERS
+============================================================ */
+window.addEventListener('load', () => {
+  setTimeout(() => { 
+    $('#loading-screen').classList.add('hidden');
+    // Animate stats counter
+    $$('.hero-stat-num').forEach(el => {
+      const target = parseInt(el.getAttribute('data-target'));
+      if(isNaN(target)) return;
+      let count = 0;
+      const inc = target / 50;
+      const t = setInterval(() => {
+        count += inc;
+        if(count >= target) { el.innerHTML = target + '<span>+</span>'; clearInterval(t); }
+        else { el.innerHTML = Math.floor(count) + '<span>+</span>'; }
+      }, 30);
+    });
+  }, 2200);
+});
+
+// Scroll Progress
+window.addEventListener('scroll', () => {
+  const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+  const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+  $('#scroll-progress').style.width = (winScroll / height) * 100 + "%";
+});
+
+// Navbar & Back to Top
+const navbar = $('#navbar');
+const hamburger = $('#hamburger');
+const mobileNav = $('#mobile-nav');
+
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 50);
+  $('#back-to-top').classList.toggle('visible', window.scrollY > 500);
+});
+
+hamburger.addEventListener('click', () => {
+  hamburger.classList.toggle('open');
+  mobileNav.classList.toggle('open');
+  document.body.classList.toggle('no-scroll');
+});
+
+$$('.mobile-nav-link').forEach(a => {
+  a.addEventListener('click', () => {
+    hamburger.classList.remove('open');
+    mobileNav.classList.remove('open');
+    document.body.classList.remove('no-scroll');
+  });
+});
+
+$('#back-to-top').addEventListener('click', () => window.scrollTo({ top:0, behavior:'smooth' }));
+
+// ============================================================
+// DARK MODE TOGGLE
+// ============================================================
+(function initDarkMode() {
+  const html = document.documentElement;
+  const btn = $('#dark-toggle');
+  const saved = localStorage.getItem('psyrofories-theme') || 'light';
+  if (saved === 'dark') html.setAttribute('data-theme', 'dark');
+
+  btn.addEventListener('click', () => {
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    if (isDark) {
+      html.removeAttribute('data-theme');
+      localStorage.setItem('psyrofories-theme', 'light');
+    } else {
+      html.setAttribute('data-theme', 'dark');
+      localStorage.setItem('psyrofories-theme', 'dark');
+    }
+  });
+})();
+
+// Scroll Reveal
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => { 
+    if(e.isIntersecting) {
+      e.target.classList.add('active');
+      revealObserver.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.15, rootMargin: "0px 0px -50px 0px" });
+$$('.reveal').forEach(el => revealObserver.observe(el));
+
+// Ripple Effect
+document.addEventListener('click', function(e) {
+  const target = e.target.closest('.btn-ripple');
+  if (!target) return;
+  const rect = target.getBoundingClientRect();
+  const x = e.clientX - rect.left;
+  const y = e.clientY - rect.top;
+  const ripple = document.createElement('span');
+  ripple.className = 'ripple';
+  ripple.style.left = `${x}px`;
+  ripple.style.top = `${y}px`;
+  target.appendChild(ripple);
+  setTimeout(() => ripple.remove(), 600);
+});
+
+/* ============================================================
+   MODULES RENDER
+============================================================ */
+
+// 1. Daily Quote
+let quoteIndex = lsGet('psyro_quote_idx', Math.floor(Math.random()*QUOTES.length));
+function showQuote(i) {
+  const q = QUOTES[i % QUOTES.length];
+  const tEl = $('#daily-quote-text');
+  const aEl = $('#daily-quote-author');
+  tEl.style.opacity = 0; tEl.style.transform = 'translateY(10px)';
+  aEl.style.opacity = 0;
+  setTimeout(() => {
+    tEl.textContent = `"${q.text}"`; aEl.textContent = `— ${q.author}`;
+    tEl.style.opacity = 1; tEl.style.transform = 'translateY(0)';
+    aEl.style.opacity = 1;
+    tEl.style.transition = 'all 0.6s ease'; aEl.style.transition = 'opacity 0.6s ease';
+  }, 300);
+  $('#hero-quote-text').textContent = `"${q.text}"`;
+  $('#hero-quote-author').textContent = `— ${q.author}`;
+}
+showQuote(quoteIndex);
+$('#refresh-quote').addEventListener('click', () => {
+  quoteIndex = (quoteIndex + 1) % QUOTES.length;
+  lsSet('psyro_quote_idx', quoteIndex);
+  showQuote(quoteIndex);
+});
+
+// 2. Myth vs Fact 3D
+const mythGrid = $('#myth-grid');
+MYTH_FACTS.forEach((mf, i) => {
+  const card = document.createElement('div');
+  card.className = 'myth-card reveal delay-' + ((i%3)+1);
+  card.innerHTML = `
+    <div class="myth-card-inner">
+      <div class="myth-front">
+        <div class="myth-header"><div class="myth-icon">❌</div> MITOS</div>
+        <p class="myth-text">${mf.myth}</p>
+        <div class="flip-hint">Arahkan/Tap</div>
+      </div>
+      <div class="myth-back">
+        <div class="myth-header"><div class="myth-icon">✅</div> FAKTA KLINIS</div>
+        <p class="fact-text">${mf.fact}</p>
+      </div>
+    </div>`;
+  mythGrid.appendChild(card);
+  revealObserver.observe(card);
+});
+
+// 3. Figures (Tilt Effect in JS)
+const figuresGrid = $('#figures-grid');
+FIGURES.forEach((fig, i) => {
+  const card = document.createElement('div');
+  card.className = 'figure-card';
+  card.innerHTML = `
+    <div class="figure-avatar"><img src="${fig.photo}" alt="${fig.name}" loading="lazy"></div>
+    <div class="figure-name">${fig.name}</div>
+    <div class="figure-era">${fig.era}</div>
+    <div class="figure-theory">${fig.theory}</div>
+    <div style="margin-top:20px; font-size:0.8rem; color:var(--text-light); font-weight:600; letter-spacing:1px; text-transform:uppercase;">Baca Profil ➔</div>`;
+  
+  // 3D Tilt
+  card.addEventListener('mousemove', e => {
+    const r = card.getBoundingClientRect();
+    const x = e.clientX - r.left, y = e.clientY - r.top;
+    const cx = r.width/2, cy = r.height/2;
+    card.style.transform = `perspective(1000px) rotateX(${((y-cy)/cy)*-5}deg) rotateY(${((x-cx)/cx)*5}deg) scale(1.02)`;
+  });
+  card.addEventListener('mouseleave', () => card.style.transform = `none`);
+  
+  card.addEventListener('click', () => openFigureModal(fig));
+  figuresGrid.appendChild(card);
+});
+
+const figureModal = $('#figure-modal');
+function openFigureModal(fig) {
+  const avatarEl = $('#modal-avatar');
+  avatarEl.innerHTML = `<img src="${fig.photo}" alt="${fig.name}">`;
+  $('#modal-name').textContent = fig.name;
+  $('#modal-era').textContent = fig.era;
+  $('#modal-theory').textContent = fig.theory;
+  $('#modal-bio').textContent = fig.bio;
+  $('#modal-contribution').textContent = fig.contribution;
+  $('#modal-quote').textContent = fig.quote;
+  figureModal.classList.add('open');
+  document.body.classList.add('no-scroll');
+}
+
+// 4. Disorders
+const disorderTabsEl = $('#disorder-tabs');
+const disorderPanelsEl = $('#disorder-panels');
+DISORDERS.forEach((d, i) => {
+  const tab = document.createElement('button');
+  tab.className = 'disorder-tab btn-ripple' + (i===0?' active':'');
+  tab.textContent = d.tab;
+  tab.addEventListener('click', () => {
+    $$('.disorder-tab').forEach(t=>t.classList.remove('active'));
+    $$('.disorder-panel').forEach(p=>p.classList.remove('active'));
+    tab.classList.add('active');
+    $(`#dp-${d.id}`).classList.add('active');
+  });
+  disorderTabsEl.appendChild(tab);
+
+  const panel = document.createElement('div');
+  panel.className = 'disorder-panel' + (i===0?' active':'');
+  panel.id = `dp-${d.id}`;
+  panel.innerHTML = `
+    <div class="disorder-content">
+      <div class="disorder-info">
+        <div class="disorder-name">${d.name}</div>
+        <div class="disorder-name-id">${d.nameId}</div>
+        <p class="disorder-desc">${d.desc}</p>
+        <div class="disorder-list-title">Red Flags (Gejala Umum)</div>
+        <div class="disorder-list">
+          ${d.symptoms.map((s,si)=>`<div class="disorder-list-item"><span class="disorder-bullet">${si+1}</span><span>${s}</span></div>`).join('')}
+        </div>
+      </div>
+      <div class="disorder-visual">
+        <div class="disorder-emoji">${d.emoji}</div>
+        <div class="disorder-stat-grid">
+          ${d.stats.map(s=>`<div class="disorder-stat-card"><div class="disorder-stat-num">${s.num}</div><div class="disorder-stat-label">${s.label}</div></div>`).join('')}
+        </div>
+        <div class="disorder-help">
+          <div class="disorder-help-title">Terapi Evidenced-Based</div>
+          <div class="disorder-help-text">${d.helpText}</div>
+        </div>
+      </div>
+    </div>`;
+  disorderPanelsEl.appendChild(panel);
+});
+
+// 5. Mood Tracker
+const moodEmojisEl = $('#mood-emojis');
+let selectedMood = null;
+MOODS.forEach((m, i) => {
+  const btn = document.createElement('button');
+  btn.className = 'mood-emoji-btn';
+  btn.innerHTML = `<span class="mood-emoji-icon">${m.emoji}</span><span class="mood-emoji-label">${m.label}</span>`;
+  btn.addEventListener('click', () => {
+    $$('.mood-emoji-btn').forEach(b=>b.classList.remove('selected'));
+    btn.classList.add('selected');
+    selectedMood = m;
+    const list = $('#suggest-list');
+    list.innerHTML = m.activities.map(a => `<div class="suggest-item"><span>${a}</span></div>`).join('');
+    $('#mood-suggest').classList.add('visible');
+    // Scroll a bit to show suggestion
+    setTimeout(() => $('#mood-suggest').scrollIntoView({behavior:'smooth', block:'nearest'}), 100);
+  });
+  moodEmojisEl.appendChild(btn);
+});
+
+$('#save-mood').addEventListener('click', () => {
+  if (!selectedMood) { showToast('Pilih energi/mood kamu terlebih dahulu!','⚠️'); return; }
+  const note = $('#mood-note').value.trim();
+  const entries = lsGet('psyro_moods', []);
+  entries.unshift({ mood: selectedMood.label, emoji: selectedMood.emoji, note, date: new Date().toISOString() });
+  if(entries.length > 30) entries.pop();
+  lsSet('psyro_moods', entries);
+  $('#mood-note').value = '';
+  $$('.mood-emoji-btn').forEach(b=>b.classList.remove('selected'));
+  selectedMood = null;
+  $('#mood-suggest').classList.remove('visible');
+  renderMoodHistory();
+  showToast('Insights tersimpan! Cek riwayatmu.','🌟');
+});
+
+function renderMoodHistory() {
+  const entries = lsGet('psyro_moods', []);
+  const list = $('#mood-history-list');
+  $('#mood-count').textContent = entries.length ? `${entries.length} Catatan` : '';
+  if (!entries.length) { list.innerHTML = '<p style="grid-column:1/-1;text-align:center;color:var(--text-light);padding:30px;">Belum ada data. Mulai lacak pola emosimu hari ini!</p>'; return; }
+  list.innerHTML = entries.map((e,i) => `
+    <div class="mood-entry">
+      <div class="mood-entry-emoji">${e.emoji}</div>
+      <div class="mood-entry-info">
+        <div style="display:flex; justify-content:space-between;">
+            <div class="mood-entry-mood">${e.mood}</div>
+            <button class="mood-delete" title="Hapus" onclick="deleteMood(${i})">✕</button>
+        </div>
+        <div class="mood-entry-date">${formatDate(e.date)}</div>
+        ${e.note ? `<div class="mood-entry-note">${e.note}</div>` : ''}
+      </div>
+    </div>`).join('');
+}
+window.deleteMood = (i) => {
+  const entries = lsGet('psyro_moods', []); entries.splice(i, 1); lsSet('psyro_moods', entries);
+  renderMoodHistory(); showToast('Catatan dihapus','🗑️');
+};
+renderMoodHistory();
+
+// 6. Journaling
+const journalMoods = ['🤩','😊','😐','😔','😤','😰','🔋'];
+let selectedJournalMood = '😊';
+const jmRow = $('#journal-mood-row');
+journalMoods.forEach(m => {
+  const btn = document.createElement('button');
+  btn.className = 'journal-mood-opt' + (m===selectedJournalMood?' sel':'');
+  btn.textContent = m;
+  btn.addEventListener('click', () => {
+    $$('.journal-mood-opt').forEach(b=>b.classList.remove('sel'));
+    btn.classList.add('sel'); selectedJournalMood = m;
+  });
+  jmRow.appendChild(btn);
+});
+
+$('#save-journal').addEventListener('click', () => {
+  const title = $('#journal-title').value.trim();
+  const content = $('#journal-content').value.trim();
+  if(!title || !content) { showToast('Beri judul dan tulis sesuatu di jurnalmu!','✍️'); return; }
+  const entries = lsGet('psyro_journals', []);
+  entries.unshift({ id: Date.now(), title, content, mood: selectedJournalMood, date: new Date().toISOString() });
+  lsSet('psyro_journals', entries);
+  $('#journal-title').value = ''; $('#journal-content').value = '';
+  renderJournals();
+  showToast('Memori diamankan di Arsip.','🔒');
+});
+
+function renderJournals() {
+  const entries = lsGet('psyro_journals', []);
+  const el = $('#journal-entries');
+  $('#journal-count').textContent = entries.length;
+  if(!entries.length) { el.innerHTML = `<div class="journal-empty"><div class="journal-empty-icon">🍃</div><p style="font-weight:600; color:var(--text-mid); font-size:1.1rem; margin-bottom:8px;">Arsip masih kosong</p><p>Mulai tuangkan pikiran pertamamu hari ini.</p></div>`; return; }
+  el.innerHTML = entries.map((e,i) => `
+    <div class="journal-entry" onclick="viewJournal(${i})">
+      <div class="journal-entry-header">
+        <div class="journal-entry-emoji">${e.mood}</div>
+        <div class="journal-entry-meta">
+          <div class="journal-entry-title-text">${e.title}</div>
+          <div class="journal-entry-date-text">${formatDate(e.date)}</div>
+        </div>
+      </div>
+      <div class="journal-entry-preview">${e.content.substring(0,90)}${e.content.length>90?'...':''}</div>
+      <button class="journal-entry-delete" title="Hapus" onclick="deleteJournal(event,${i})">🗑️</button>
+    </div>`).join('');
+}
+window.viewJournal = (i) => {
+  const e = lsGet('psyro_journals', [])[i];
+  $('#jm-emoji').textContent = e.mood; $('#jm-title').textContent = e.title;
+  $('#jm-date span:last-child').textContent = formatDate(e.date); $('#jm-content').textContent = e.content;
+  $('#journal-modal').classList.add('open'); document.body.classList.add('no-scroll');
+};
+window.deleteJournal = (ev, i) => {
+  ev.stopPropagation();
+  const entries = lsGet('psyro_journals', []); entries.splice(i, 1); lsSet('psyro_journals', entries);
+  renderJournals(); showToast('Jurnal dihapus','🗑️');
+};
+renderJournals();
+
+// Close Modals
+function closeModals() {
+  $$('.modal-overlay').forEach(m=>m.classList.remove('open'));
+  document.body.classList.remove('no-scroll');
+}
+$$('.modal-close').forEach(b => b.addEventListener('click', closeModals));
+$$('.modal-overlay').forEach(m => m.addEventListener('click', e => { if(e.target===m) closeModals(); }));
+
+// 7. Mindfulness
+const BREATH_METHODS = {
+  '4-7-8': { inhale:4, hold:7, exhale:8, desc:'<b>Metode 4-7-8</b><br>Tarik 4s, Tahan 7s, Hembus 8s. Resep ampuh atasi insomnia dan mereset sistem saraf yang overaktif.' },
+  '4-4-4': { inhale:4, hold:4, exhale:4, desc:'<b>Box Breathing</b><br>Tarik 4s, Tahan 4s, Hembus 4s, Tahan 4s. Teknik militer (Navy SEAL) untuk mengembalikan fokus super dalam krisis.' },
+  '4-6-8': { inhale:4, hold:6, exhale:8, desc:'<b>Metode 4-6-8</b><br>Tarik 4s, Tahan 6s, Hembus 8s. Hembusan napas yang panjang mengaktifkan saraf parasimpatik untuk relaksasi total.' }
+};
+let breathMethod = BREATH_METHODS['4-7-8']; let breathRunning = false; let breathTimer = null; let breathCycles = 0;
+
+$$('.breath-method-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    if(breathRunning) return;
+    $$('.breath-method-tab').forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+    breathMethod = BREATH_METHODS[tab.dataset.method];
+    $('#breath-instructions').innerHTML = breathMethod.desc; resetBreath();
+  });
+});
+$('#breath-instructions').innerHTML = breathMethod.desc;
+
+function resetBreath() {
+  clearInterval(breathTimer); breathRunning = false;
+  $('#breath-circle').className = 'breath-circle';
+  $('#breath-phase').textContent = 'SIAP'; $('#breath-count').textContent = '●';
+  $('#breath-progress-bar').style.width = '0%';
+}
+
+$('#breath-start').addEventListener('click', () => {
+  if(breathRunning) return;
+  breathRunning = true; breathCycles = 0;
+  $('#breath-cycles').textContent = `Total Siklus: 0`;
+  runBreathPhase('TARIK NAPAS', breathMethod.inhale, 'inhale', doHold1);
+});
+$('#breath-stop').addEventListener('click', () => { resetBreath(); $('#breath-instructions').innerHTML = breathMethod.desc; });
+
+function runBreathPhase(text, dur, cls, nextFn) {
+  if(!breathRunning) return;
+  $('#breath-phase').textContent = text; $('#breath-circle').className = 'breath-circle ' + cls;
+  let remaining = dur; $('#breath-count').textContent = remaining;
+  const start = Date.now();
+  
+  const tick = () => {
+    if(!breathRunning) return;
+    const elapsed = (Date.now() - start) / 1000;
+    $('#breath-progress-bar').style.width = Math.min(100, (elapsed/dur)*100) + '%';
+    remaining = Math.max(0, Math.ceil(dur - elapsed));
+    $('#breath-count').textContent = remaining || '✓';
+    if(elapsed < dur) breathTimer = setTimeout(tick, 50);
+    else { $('#breath-progress-bar').style.width = '0%'; nextFn(); }
+  };
+  breathTimer = setTimeout(tick, 50);
+}
+function doHold1() { 
+  if(breathMethod.hold > 0) runBreathPhase('TAHAN', breathMethod.hold, 'hold', doExhale); 
+  else doExhale();
+}
+function doExhale() { runBreathPhase('HEMBUSKAN', breathMethod.exhale, 'exhale', doHold2); }
+function doHold2() {
+  const isBox = (breathMethod.inhale===4 && breathMethod.hold===4 && breathMethod.exhale===4);
+  if(isBox) runBreathPhase('TAHAN (KOSONG)', 4, 'hold', finishCycle);
+  else finishCycle();
+}
+function finishCycle() {
+  breathCycles++; $('#breath-cycles').textContent = `Total Siklus: ${breathCycles}`;
+  if(breathRunning) runBreathPhase('TARIK NAPAS', breathMethod.inhale, 'inhale', doHold1);
+}
+
+// 8. Quiz
+let qIdx = 0, qScore = 0, qAnswered = false;
+function loadQuestion(i) {
+  const q = QUIZ_QUESTIONS[i];
+  $('#quiz-q-num').textContent = `Q.${i+1} / ${QUIZ_QUESTIONS.length}`;
+  $('#quiz-q-text').textContent = q.q;
+  $('#quiz-progress-fill').style.width = `${((i)/QUIZ_QUESTIONS.length)*100}%`;
+  $('#quiz-score-display').textContent = `Skor: ${qScore}`;
+  const optsEl = $('#quiz-options'); optsEl.innerHTML = '';
+  q.opts.forEach((opt, j) => {
+    const btn = document.createElement('button'); btn.className = 'quiz-option btn-ripple';
+    btn.innerHTML = `<span class="quiz-option-icon">${String.fromCharCode(65+j)}</span>${opt}`;
+    btn.addEventListener('click', () => answerQuestion(j, q));
+    optsEl.appendChild(btn);
+  });
+  $('#quiz-explanation').className = 'quiz-explanation';
+  $('#quiz-next').disabled = true; qAnswered = false;
+}
+function answerQuestion(chosen, q) {
+  if(qAnswered) return;
+  qAnswered = true;
+  const opts = $$('.quiz-option'); opts.forEach(b=>b.disabled=true);
+  if(chosen === q.ans) {
+    opts[chosen].classList.add('correct'); opts[chosen].querySelector('.quiz-option-icon').textContent = '✓';
+    qScore++;
+  } else {
+    opts[chosen].classList.add('wrong'); opts[chosen].querySelector('.quiz-option-icon').textContent = '✗';
+    opts[q.ans].classList.add('correct'); opts[q.ans].querySelector('.quiz-option-icon').textContent = '✓';
+  }
+  const expEl = $('#quiz-explanation'); expEl.innerHTML = `<b>Fakta Menarik:</b><br>${q.exp}`; expEl.classList.add('visible');
+  $('#quiz-score-display').textContent = `Skor: ${qScore}`; $('#quiz-next').disabled = false;
+}
+$('#quiz-next').addEventListener('click', () => {
+  qIdx++; if(qIdx < QUIZ_QUESTIONS.length) loadQuestion(qIdx); else showQuizResult();
+});
+function shootConfetti() {
+  for(let i=0; i<80; i++) {
+    const c = document.createElement('div'); c.className = 'confetti';
+    c.style.left = Math.random() * 100 + 'vw'; c.style.animationDelay = Math.random() * 2 + 's';
+    c.style.backgroundColor = ['#A7D8FF', '#2C5282', '#FFD700', '#10B981', '#F43F5E'][Math.floor(Math.random()*5)];
+    document.body.appendChild(c); setTimeout(()=>c.remove(), 4000);
+  }
+}
+function showQuizResult() {
+  $('#quiz-progress-fill').style.width = '100%'; $('#quiz-content').style.display = 'none';
+  $('#quiz-result').classList.add('visible'); $('#quiz-final-score').textContent = qScore;
+  const msgs = [
+    [0,3,'Awal yang Baik!','Jangan patah semangat. Ulangi membaca materi di Pusat Edukasi dan coba lagi!'],
+    [4,6,'Cukup Mengesankan!','Fondasi pengetahuanmu sudah terbentuk. Terus perkaya wawasanmu!'],
+    [7,9,'Luar Biasa Cerdas!','Pemahamanmu tentang psikologi jauh di atas rata-rata!'],
+    [10,10,'Master Psikologi!','Pengetahuan sempurna! Kamu sungguh memahami kompleksitas pikiran manusia.'],
+  ];
+  const [,, msg, sub] = msgs.find(([mn,mx])=>qScore>=mn&&qScore<=mx) || msgs[0];
+  $('#quiz-result-msg').textContent = msg; $('#quiz-result-sub').textContent = sub;
+  if(qScore >= 7) shootConfetti();
+}
+$('#quiz-restart').addEventListener('click', () => {
+  qIdx=0; qScore=0; qAnswered=false; $('#quiz-content').style.display='';
+  $('#quiz-result').classList.remove('visible'); loadQuestion(0);
+});
+loadQuestion(0);
+
+// 9. Self-Care Checklist
+const SC_KEY = 'psyro_sc_' + new Date().toDateString();
+let scState = lsGet(SC_KEY, {});
+
+function renderSelfCare() {
+  const rList = (items, cid) => {
+    const el = $(`#${cid}`); el.innerHTML = '';
+    items.forEach(item => {
+      const done = !!scState[item.id];
+      const div = document.createElement('div'); div.className = 'selfcare-item btn-ripple' + (done?' done':'');
+      div.innerHTML = `<div class="selfcare-check"><span class="selfcare-check-icon">✓</span></div><span class="selfcare-emoji">${item.emoji}</span><span class="selfcare-text">${item.text}</span>`;
+      div.addEventListener('click', () => {
+        scState[item.id] = !scState[item.id]; lsSet(SC_KEY, scState); renderSelfCare();
+        if(scState[item.id]) {
+          // Mini pop animation
+          div.style.transform = 'scale(0.95)';
+          setTimeout(() => div.style.transform = 'scale(1)', 100);
+        }
+      });
+      el.appendChild(div);
+    });
+  };
+  rList(SELFCARE_ITEMS.morning, 'selfcare-morning'); rList(SELFCARE_ITEMS.evening, 'selfcare-evening');
+  
+  const total = SELFCARE_ITEMS.morning.length + SELFCARE_ITEMS.evening.length;
+  const done = Object.values(scState).filter(Boolean).length;
+  const pct = Math.round((done/total)*100);
+  
+  $('#selfcare-pct').textContent = pct + '%';
+  $('#selfcare-arc').style.strokeDashoffset = 251.2 - (pct/100) * 251.2;
+  
+  const msgs = [
+    [0,0,'Setiap perjalanan besar dimulai dari 1 langkah kecil.'],
+    [1,33,'Awal yang bagus! Pertahankan momentum ini.'],
+    [34,66,'Separuh jalan menuju kemenangan harianmu!'],
+    [67,99,'Sedikit lagi! Kamu berhak bangga pada dirimu hari ini.'],
+    [100,100,'Sempurna! Kamu telah memprioritaskan dirimu 100% hari ini.'],
+  ];
+  $('#selfcare-progress-text').textContent = (msgs.find(([mn,mx])=>pct>=mn&&pct<=mx)||msgs[0])[2];
+  if(pct === 100 && !window.scConfettiFired) { shootConfetti(); window.scConfettiFired = true; }
+  else if(pct < 100) { window.scConfettiFired = false; }
+}
+$('#selfcare-reset').addEventListener('click', () => {
+  scState = {}; lsSet(SC_KEY, scState); renderSelfCare();
+  showToast('Checklist direset. Mari mulai ulang!','🔄');
+});
+renderSelfCare();
+
+</script>
+</body>
+</html>
